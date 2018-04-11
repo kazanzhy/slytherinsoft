@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from .views import RegisterFormView
+from .views import LoginFormView, hello
+
+admin.autodiscover()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path(r'register/', RegisterFormView.as_view()),
+    path(r'login/', LoginFormView.as_view()),
+    path(r'/', hello)
 ]
