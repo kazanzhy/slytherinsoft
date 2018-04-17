@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'password_reset',
+
+
 ]
 
 MIDDLEWARE = [
@@ -47,18 +50,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'slytherinideas.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'slytherinideas/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
+                # 'django.template.loaders.filesystem.Loader'
+                # 'django.template.loaders.app_directories.Loader'
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -75,10 +82,15 @@ WSGI_APPLICATION = 'slytherinideas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sldb',
+        'USER': 'sluser',
+        'PASSWORD': 'jDW72Gsvkk8s',
+        'PORT': '3306',
+        'HOST': 'localhost',
+        }
     }
-}
+
 
 
 # Password validation
@@ -118,3 +130,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 25
+# # EMAIL_HOST_USER = 'testsite_app'
+# # EMAIL_HOST_PASSWORD = 'mys3cr3tp4ssw0rd'
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'TestSite Team <noreply@example.com>'
+
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 1025
