@@ -5,6 +5,12 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from social_django.models import UserSocialAuth
+from django import forms
+from captcha.fields import ReCaptchaField
+
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
+from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
+
 
 @login_required
 def home(request):
@@ -57,3 +63,6 @@ def password(request):
     else:
         form = PasswordForm(request.user)
     return render(request, 'password.html', {'form': form})
+
+class FormWithCaptcha(forms.Form):
+    captcha = ReCaptchaField()

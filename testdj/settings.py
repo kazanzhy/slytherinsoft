@@ -51,7 +51,8 @@ INSTALLED_APPS = [
 
     'sslserver',
 
-    #'djangosecure',
+    # 'captcha',
+    'snowpenguin.django.recaptcha2',
 ]
 
 MIDDLEWARE = [
@@ -200,3 +201,5 @@ SOCIALACCOUNT_PROVIDERS = \
 SITE_ID = 1
 # ACCOUNT_EMAIL_REQUIRED=True
 # ACCOUNT_USERNAME_REQURIED=True
+RECAPTCHA_PUBLIC_KEY = '6LfkSVUUAAAAAOUK4pExTdM8PtZLinE4d1_O3Q4n'
+RECAPTCHA_PRIVATE_KEY = '6LfkSVUUAAAAAEp295UbbKhlqtaFyHIf8wpSzH4g'
