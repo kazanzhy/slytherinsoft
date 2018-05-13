@@ -99,7 +99,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dbtest',
-        'USER': 'sluser',
+        'USERNAME': 'sirius',
         'PASSWORD': 'jDW72Gsvkk8s',
         'PORT': '3306',
         'HOST': 'localhost',
