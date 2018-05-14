@@ -44,10 +44,10 @@ INSTALLED_APPS = [
     'allauth.account', # new
     'allauth.socialaccount', # new
 
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.twitter',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.instagram',
+    #'allauth.socialaccount.providers.facebook',
+    #'allauth.socialaccount.providers.twitter',
+    #'allauth.socialaccount.providers.google',
+    #'allauth.socialaccount.providers.instagram',
 
     'sslserver',
 
