@@ -6,7 +6,7 @@ class IdeaStatus(models.Model):
     '''
     Статусы идей. Каждая трока - один статус (только создано, подтверждено, отклонено)
     '''
-    status = models.CharField(unique=True)
+    status = models.CharField(unique=True, max_length=255)
     class Meta:
         db_table = 'statuses'
 
@@ -15,7 +15,7 @@ class Role(models.Model):
     '''
     Роли пользователей. Каждая трока - одна роль (архитектор, модератор, пользователь, забаненный)
     '''
-    status = models.CharField(unique=True)
+    status = models.CharField(unique=True, max_length=255)
     class Meta:
         db_table = 'roles'
 
@@ -24,7 +24,7 @@ class Extenden_User(models.Model):
     '''
     База пользователей. Расширяет стандартную модель
     '''
-    user = models.ForeignKey(User, on_delete=models.CASCADE) # Standart User model
+    user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     is_verified = models.BooleanField()
     class Meta:
@@ -35,12 +35,11 @@ class Ideas(models.Model):
     '''
     Идеи. Каждая строка - одна идея
     '''
-    title = models.CharField() #unique=True) ???
+    title = models.CharField(max_length=255) #unique=True) ???
     cover = models.ImageField(upload_to = 'uploads/%Y/%m/%d/', blank=True)
     content = models.TextField()
     status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE)
     author = models.ForeignKey(Extenden_User, on_delete=models.CASCADE)
-    moderator = models.ForeignKey(Extenden_User, on_delete=models.CASCADE)
     create_date = models.DateTimeField()
     edit_date = models.DateTimeField()
     class Meta:
