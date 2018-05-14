@@ -14,16 +14,18 @@
 #sudo pip3 install virtualenv
 #mkdir dataart
 
-cd dataart
-
 #git clone https://github.com/batwingsv/slytherinsoft.git
+
 cd slytherinsoft
+
 #virtualenv $(pwd)/venv
 source $(pwd)/venv/bin/activate
 
 #git checkout dima
+
 sudo pip3 install --upgrade pip
 sudo pip3 install -r requirements.txt
+
 #sudo mysql -u root -p < script.sql
 #sudo python3 manage.py makemigrations
 #sudo python3 manage.py migrate
