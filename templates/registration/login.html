@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% providers_media_js %}
+{% block content %}
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+  </form>
+  <br>
+  <p><strong>-- OR --</strong></p>
+  <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
+  <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a><br>
+  <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a><a href="{% provider_login_url "facebook" method="js_sdk" %}">Login Button image</a>
+    <a href="{% provider_login_url "facebook" method="js_sdk" %}" class="btn btn-block btn-social btn-facebook" style="background-color:#3b5998;text-align:center">
+  <span class="fa fa-facebook"></span>
+               Sign in with Facebook
+ </a>
+{% endblock %}
