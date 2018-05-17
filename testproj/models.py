@@ -6,7 +6,7 @@ class IdeaStatus(models.Model):
     '''
     Idea statuses. One row - one status (just created, approved, declined)
     '''
-    status = models.CharField(unique=True, max_length=255)
+    status = models.CharField(unique=True, max_length=255, default='Just created')
 
     def __str__(self):
         return self.status
@@ -21,7 +21,7 @@ class Role(models.Model):
     '''
     Roles of users. One row - one role (architect, moderator, user, banned)
     '''
-    role = models.CharField(unique=True, max_length=255)
+    role = models.CharField(unique=True, max_length=255, default='User')
 
     def __str__(self):
         return self.role
@@ -41,7 +41,7 @@ class ExtendedUser(models.Model):
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):
-        return (self.status, self.role, self.is_verified)
+        return '{} ({})'.format(self.user, self.role, self.is_verified)
 
     class Meta:
         db_table = 'extendeduser'
@@ -61,11 +61,11 @@ class Ideas(models.Model):
     #moderator = models.ForeignKey(ExtendendUser, on_delete=models.CASCADE, related_name='moderator')
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
-    likes = models.ManyToManyField(User)
-    #views = models.PositiveIntegerField()
+    likes = models.ManyToManyField(User, blank=True)
+    #views = models.PositiveIntegerField(blank=True)
 
     def __str__(self):
-        return (self.title, self.status, self.author)
+        return '{} by {} now is {}'.format(self.title, self.author, self.status)
 
     class Meta:
         db_table = 'ideas'

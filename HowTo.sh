@@ -32,6 +32,6 @@ pip3 install -r requirements.txt
 #sudo python3 manage.py migrate
 
 #gunicorn testdj.wsgi:application --bind 127.0.0.1:8080 
-# sudo python3 manage.py runserver
+#python3 manage.py runserver
 
 
