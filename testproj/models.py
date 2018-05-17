@@ -4,67 +4,76 @@ from django.contrib.auth.models import User
 
 class IdeaStatus(models.Model):
     '''
-    Статусы идей. Каждая трока - один статус (только создано, подтверждено, отклонено)
+    Idea statuses. One row - one status (just created, approved, declined)
     '''
     status = models.CharField(unique=True, max_length=255)
+
+    def __str__(self):
+        return self.status
+    
     class Meta:
-        db_table = 'statuses'
+        db_table = 'ideastatus'
+        verbose_name = "Idea Status"
+        verbose_name_plural = "Idea Statuses"
 
 
 class Role(models.Model):
     '''
-    Роли пользователей. Каждая трока - одна роль (архитектор, модератор, пользователь, забаненный)
+    Roles of users. One row - one role (architect, moderator, user, banned)
     '''
-    status = models.CharField(unique=True, max_length=255)
+    role = models.CharField(unique=True, max_length=255)
+
+    def __str__(self):
+        return self.role
+
     class Meta:
         db_table = 'roles'
+        verbose_name = "Roles"
+        verbose_name_plural = "Roles"
 
 
-class Extenden_User(models.Model):
+class ExtendedUser(models.Model):
     '''
-    База пользователей. Расширяет стандартную модель
+    Users. Extends of standard model
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
-    is_verified = models.BooleanField()
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='torole', related_query_name='')
+    is_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return (self.status, self.role, self.is_verified)
+
     class Meta:
-        db_table = 'users'
+        db_table = 'extendeduser'
+        verbose_name = "Extended User"
+        verbose_name_plural = "Extended Users"
 
 
 class Ideas(models.Model):
     '''
-    Идеи. Каждая строка - одна идея
+    Ideas. 
     '''
-    title = models.CharField(max_length=255) #unique=True) ???
-    cover = models.ImageField(upload_to = 'uploads/%Y/%m/%d/', blank=True)
+    title = models.CharField(max_length=255) #unique=True)
+    cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True)
     content = models.TextField()
-    status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE)
-    author = models.ForeignKey(Extenden_User, on_delete=models.CASCADE)
-    create_date = models.DateTimeField()
-    edit_date = models.DateTimeField()
+    status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='tostatus')
+    author = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='author')
+    #moderator = models.ForeignKey(ExtendendUser, on_delete=models.CASCADE, related_name='moderator')
+    create_date = models.DateTimeField(auto_now_add=True)
+    edit_date = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(User)
+    #views = models.PositiveIntegerField()
+
+    def __str__(self):
+        return (self.title, self.status, self.author)
+
     class Meta:
         db_table = 'ideas'
+        verbose_name = "Ideas"
+        verbose_name_plural = "Ideas"
 
 
-class Likes(models.Model):
-    '''
-    Лайки. Каждая строка - лайк одного пользователя одной идее
-    '''
-    user = models.ForeignKey(Extenden_User, on_delete=models.CASCADE)
-    idea = models.ForeignKey(Ideas, on_delete=models.CASCADE)
-    create_date = models.DateTimeField()
-    class Meta:
-        db_table = 'likes'
 
 
-class Views(models.Model):
-    '''
-    Просмотры. Каждая строка - просмотр одной идеи одним пользователем
-    '''
-    user = models.ForeignKey(Extenden_User, on_delete=models.CASCADE)
-    idea = models.ForeignKey(Ideas, on_delete=models.CASCADE)
-    create_date = models.DateTimeField()
-    class Meta:
-        db_table = 'views'
 
 
