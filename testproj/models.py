@@ -58,7 +58,7 @@ class Ideas(models.Model):
     content = models.TextField()
     status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='tostatus')
     author = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='author')
-    moderator = models.ForeignKey(ExtendendUser, on_delete=models.CASCADE, related_name='moderator')
+    moderator = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='moderator')
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, blank=True)

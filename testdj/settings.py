@@ -53,6 +53,8 @@ INSTALLED_APPS = [
 
     # 'captcha',
     'snowpenguin.django.recaptcha2',
+
+    'sorl.thumbnail'
 ]
 
 MIDDLEWARE = [
