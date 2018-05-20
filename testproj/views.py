@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 
 from social_django.models import UserSocialAuth
 from django import forms
@@ -10,6 +10,13 @@ from captcha.fields import ReCaptchaField
 
 from snowpenguin.django.recaptcha2.fields import ReCaptchaField
 from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
+from django.template import RequestContext
+
+from django import forms
+from testproj.models import Ideas
+from testproj.forms import IdeasForm
+from django.views.generic.dates import MonthArchiveView
+from django.views.generic.dates import WeekArchiveView
 
 
 @login_required
@@ -66,3 +73,35 @@ def password(request):
 
 class FormWithCaptcha(forms.Form):
     captcha = ReCaptchaField()
+
+
+@login_required
+def add_post(request):
+    request_context = RequestContext(request)
+    form = IdeasForm(request.POST or None)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.author = request.user
+        post.save()
+        return redirect(post)
+    return render(request,  'text.html',
+                  {'form': form}, request_context)
+
+def view_post(request, slug):
+    post = get_object_or_404(Ideas, slug=slug)
+    return render_to_response('text.html',
+                              {
+                                  # 'post': post,
+                                  # 'form': form,
+                              }, context_instance=RequestContext(request))
+
+class IdeasMonthArchiveView(MonthArchiveView):
+    queryset = Ideas.objects.all()
+    date_field = "pub_date"
+    allow_future = False
+
+class IdeasWeekArchiveView(WeekArchiveView):
+    queryset = Ideas.objects.all()
+    date_field = "pub_date"
+    week_format = "%W"
+    allow_future = False

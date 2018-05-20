@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.template.defaultfilters import slugify
+from tinymce.models import HTMLField
+
 
 class IdeaStatus(models.Model):
     '''
@@ -55,7 +58,8 @@ class Ideas(models.Model):
     '''
     title = models.CharField(max_length=255) #unique=True)
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True)
-    content = models.TextField()
+    # content = models.TextField()
+    content = HTMLField()
     status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='tostatus')
     author = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='author')
     #moderator = models.ForeignKey(ExtendendUser, on_delete=models.CASCADE, related_name='moderator')
@@ -63,9 +67,23 @@ class Ideas(models.Model):
     edit_date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, blank=True)
     #views = models.PositiveIntegerField(blank=True)
+    slug = models.SlugField(unique=True)
+
 
     def __str__(self):
         return '{} by {} now is {}'.format(self.title, self.author, self.status)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('blog_post_detail', (),
+                {
+                    'slug': self.slug,
+                })
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Ideas, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'ideas'

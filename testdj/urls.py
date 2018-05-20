@@ -18,8 +18,12 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from django.views import generic
 
 from testproj import views
+from testproj.models import Ideas
+from testproj.views import IdeasMonthArchiveView, IdeasWeekArchiveView
+
 # from testproj.core import views as core views
 admin.autodiscover()
 
@@ -30,6 +34,27 @@ urlpatterns = [
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
     # re_path(r'^oauth/', include('social_django.urls', namespace='social')),  # <--
     re_path(r'^$', views.home, name='home'),
+    re_path(r'^post/(?P<slug>[-\w]+)$', views.view_post, name='blog_post_detail'),
+    re_path(r'^add/post/',
+            views.add_post,
+            name='text'),
+    re_path(r'^archive/month/(?P<year>\d+)/(?P<month>\w+)$',
+            IdeasMonthArchiveView.as_view(month_format='%m'),
+            {
+                'queryset': Ideas.objects.all(),
+                'date_field': 'created_on',
+            },
+            name='blog_archive_month',
+            ),
+    re_path(r'^archive/week/(?P<year>\d+)/(?P<week>\d+)$',
+            IdeasWeekArchiveView,
+            {
+                'queryset': Ideas.objects.all(),
+                'date_field': 'created_on',
+            },
+            name='blog_archive_week',
+            ),
+    re_path(r'^tinymce/', include('tinymce.urls')),
 ]
 
 LOGIN_URL = 'login'
