@@ -1,5 +1,4 @@
 """testdj URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
 Examples:
@@ -13,6 +12,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -30,6 +30,8 @@ urlpatterns = [
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
     # re_path(r'^oauth/', include('social_django.urls', namespace='social')),  # <--
     re_path(r'^$', views.home, name='home'),
+    re_path(r'^ideas/$', views.all_ideas, name='ideas'),
+    re_path(r'^idea/([0-9]+)$', views.idea, name='idea'),
 ]
 
 LOGIN_URL = 'login'

@@ -11,10 +11,12 @@ from captcha.fields import ReCaptchaField
 from snowpenguin.django.recaptcha2.fields import ReCaptchaField
 from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 
+from .models import *
 
 @login_required
 def home(request):
     return render(request, 'home.html')
+
 
 @login_required
 def settings(request):
@@ -44,6 +46,7 @@ def settings(request):
         'can_disconnect': can_disconnect
     })
 
+
 @login_required
 def password(request):
     if request.user.has_usable_password():
@@ -64,5 +67,36 @@ def password(request):
         form = PasswordForm(request.user)
     return render(request, 'password.html', {'form': form})
 
+
+def all_ideas(request):
+    '''
+    Return list of all ideas
+    '''
+    i_list = Ideas.objects()
+    context = {'ideas_list': i_list}
+    return render(request, 'ideas.html', context)
+
+
+def idea(request, idea_number):
+    '''
+    Return one idea with selected number
+    '''
+    try:
+        idea_number = int(idea_number)
+    except:
+        idea_number = 0
+
+    idea = Ideas.objects.filter(id=idea_number)
+    context = {'idea': idea}
+    return render(request, 'idea.html', context)
+
+
 class FormWithCaptcha(forms.Form):
     captcha = ReCaptchaField()
+
+
+
+
+
+
+
