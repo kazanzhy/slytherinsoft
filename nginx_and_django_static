@@ -1,0 +1,64 @@
+1. Устанавливаем nginx
+sudo apt-get install nginx
+2. Меняем дефолтный конфиг на наш
+sudo vi /etc/nginx/sites-available/default
+Все заменяем на следующее:
+
+server {
+    # порт, который будет слушать веб-сервер в ожидании запросов от пользователй
+    listen      8000;
+    # доменное имя
+    server_name slytherin.ideas; # замените на собственный домен или IP адрес
+    charset     utf-8;
+
+    # максимальный размер загружаемых на сервер данных
+    client_max_body_size 75M;
+
+    # обслуживание медиа файлов и статики
+    location /media  {
+        alias /var/www/slytherin.ideas/media;  # расположение медиафайлов
+    }
+
+    location /static {
+        alias /var/www/slytherin.ideas/static;  # расположение статики
+
+    }
+
+    # Остальные запросы перенаправляются в Django приложение
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/tmp/gunicorn.socket;
+    }
+}
+
+
+Сохраняем
+
+3. Перезапускаем nginx командой
+sudo service nginx restart
+
+4. Сделаем gunicorn службой
+sudo vi /etc/systemd/system/gunicorn.service
+
+Вставляем следующий конфиг (замените в нем пользователя на своего и путь к проекту на свой):
+
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=viktory
+Group=www-data
+WorkingDirectory=/home/viktory/testdj
+ExecStart=/usr/local/bin/gunicorn --workers 3 --bind unix:/tmp/gunicorn.socket testdj.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+4. Делаем так, чтоб он автоматически запускался как служба и стал ею
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+
+
+
+Теперь, по 127.0.0.1:8000 наш проект запускается со статикой
