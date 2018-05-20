@@ -37,7 +37,7 @@ class ExtendedUser(models.Model):
     Users. Extends of standard model
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='torole', related_query_name='')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_id', related_query_name='')
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):
@@ -56,9 +56,9 @@ class Ideas(models.Model):
     title = models.CharField(max_length=255) #unique=True)
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True)
     content = models.TextField()
-    status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='tostatus')
-    author = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='author')
-    moderator = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='moderator')
+    status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='status_id')
+    author = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='author_id')
+    #moderator = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='moderator_id')
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, blank=True)

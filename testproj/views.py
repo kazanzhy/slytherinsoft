@@ -12,6 +12,7 @@ from snowpenguin.django.recaptcha2.fields import ReCaptchaField
 from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 
 from .models import *
+from django.http import HttpResponse # For test
 
 @login_required
 def home(request):
@@ -72,23 +73,25 @@ def all_ideas(request):
     '''
     Return list of all ideas
     '''
-    i_list = Ideas.objects()
-    context = {'ideas_list': i_list}
-    return render(request, 'ideas.html', context)
+    #i_list = Ideas.objects.filter()
+    #context = {'ideas_list': i_list}
+    #return render(request, 'ideas.html', context)
+    return HttpResponse("You're looking all ideas") # For test
 
 
-def idea(request, idea_number):
+def idea(request, idea_id):
     '''
     Return one idea with selected number
     '''
     try:
-        idea_number = int(idea_number)
+        idea_number = int(idea_id)
     except:
         idea_number = 0
 
-    idea = Ideas.objects.filter(id=idea_number)
-    context = {'idea': idea}
-    return render(request, 'idea.html', context)
+    #idea = Ideas.objects.filter(id=idea_id)
+    #context = {'idea': idea}
+    #return render(request, 'idea.html', context)
+    return HttpResponse("You're looking idea number %s." % idea_id) # For test
 
 
 class FormWithCaptcha(forms.Form):
