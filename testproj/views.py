@@ -73,25 +73,30 @@ def all_ideas(request):
     '''
     Return list of all ideas
     '''
-    #i_list = Ideas.objects.filter()
+    i_list = Ideas.objects.all() #every object of list have: 
     #context = {'ideas_list': i_list}
     #return render(request, 'ideas.html', context)
-    return HttpResponse("You're looking all ideas") # For test
+    return HttpResponse('<p></p>'.join(map(str, i_list))) # For test
 
 
 def idea(request, idea_id):
     '''
     Return one idea with selected number
     '''
-    try:
-        idea_number = int(idea_id)
+    try: 
+        idea_id = int(idea_id)
     except:
-        idea_number = 0
+        return HttpResponse('Not correct url') # For test
+    else:
+        if int(idea_id) < 1 or int(idea_id) > len (Ideas.objects.all()): 
+            return HttpResponse('This idea isn\'t created') # For test
+        else:
+            idea = Ideas.objects.get(id=idea_id)
+            return HttpResponse(str(idea)) # For test
 
-    #idea = Ideas.objects.filter(id=idea_id)
     #context = {'idea': idea}
     #return render(request, 'idea.html', context)
-    return HttpResponse("You're looking idea number %s." % idea_id) # For test
+    return HttpResponse(str(idea)) # For test
 
 
 class FormWithCaptcha(forms.Form):

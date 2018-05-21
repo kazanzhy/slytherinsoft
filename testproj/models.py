@@ -6,7 +6,7 @@ class IdeaStatus(models.Model):
     '''
     Idea statuses. One row - one status (just created, approved, declined)
     '''
-    status = models.CharField(unique=True, max_length=255, default='Just created')
+    status = models.CharField(unique=True, max_length=255, blank=True)
 
     def __str__(self):
         return self.status
@@ -21,7 +21,7 @@ class Role(models.Model):
     '''
     Roles of users. One row - one role (architect, moderator, user, banned)
     '''
-    role = models.CharField(unique=True, max_length=255, default='User')
+    role = models.CharField(unique=True, max_length=255, blank=True)
 
     def __str__(self):
         return self.role
@@ -37,7 +37,7 @@ class ExtendedUser(models.Model):
     Users. Extends of standard model
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_id', related_query_name='')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_id', blank=True)
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):
@@ -58,14 +58,14 @@ class Ideas(models.Model):
     content = models.TextField()
     status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='status_id')
     author = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='author_id')
-    #moderator = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='moderator_id')
+    moderator = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='moderator_id', null=True, blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
-    likes = models.ManyToManyField(User, blank=True)
-    views = models.PositiveIntegerField(blank=True)
+    likes = models.ManyToManyField(User, default=0)
+    views = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return '{} by {} now is {}'.format(self.title, self.author, self.status)
+        return '"{}" by "{}" now is {}'.format(self.title, self.author, self.status)
 
     class Meta:
         db_table = 'ideas'

@@ -29,9 +29,11 @@ urlpatterns = [
     re_path(r'^account_login/$', auth_views.login, name='registration/login'),
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
     # re_path(r'^oauth/', include('social_django.urls', namespace='social')),  # <--
+    
+    re_path(r'^ideas/$', views.all_ideas),
+    re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
+
     re_path(r'^$', views.home, name='home'),
-    re_path(r'^ideas/$', views.all_ideas, name='ideas'),
-    re_path(r'^idea/(?P<idea_id>[0-9]+)$', views.idea, name='idea'),
 ]
 
 LOGIN_URL = 'login'

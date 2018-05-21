@@ -95,6 +95,8 @@ ENV/
 .ropeproject
 
 # mkdocs documentation
+
+testproj/migrations
 /site
 
 # mypy
