@@ -74,6 +74,8 @@ def ideas(request):
     Return list of all ideas
     '''
     ideas_list = Ideas.objects.all() #every object of list have: 
+    for idea in ideas_list:
+        idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list}
     return render(request, 'testproj/ideas.html', context)
 
@@ -83,7 +85,11 @@ def idea(request, idea_id):
     Return one idea with selected number
     '''
     idea = get_object_or_404(Ideas, pk=idea_id)
+    idea.views += 1
+    idea.save()
+    idea.like_qty = idea.likes.count()
     context = {'idea': idea}
+    print
     return render(request, 'testproj/idea.html', context)
 
 
