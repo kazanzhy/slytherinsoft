@@ -89,7 +89,6 @@ def idea(request, idea_id):
     idea.save()
     idea.like_qty = idea.likes.count()
     context = {'idea': idea}
-    print
     return render(request, 'testproj/idea.html', context)
 
 
@@ -107,6 +106,24 @@ def like(request, idea_id):
     idea.save()
     context = {'liked': liked, 'idea_id': idea_id, 'likes': idea.likes.count()}
     return JsonResponse(context)
+
+
+def user(request, username):
+    '''
+    Return profile of selected user
+    '''
+    profile = ExtendedUser.objects.get(user__username=username)
+    context = {'profile': profile}
+    return render(request, 'testproj/user.html', context)
+
+
+def profile(request):
+    '''
+    Return user\'s own profile
+    '''
+    profile = ExtendedUser.objects.get(user__username=request.user.username)
+    context = {'profile': profile}
+    return render(request, 'testproj/profile.html', context)
 
 
 class FormWithCaptcha(forms.Form):
