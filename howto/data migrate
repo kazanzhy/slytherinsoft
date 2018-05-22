@@ -1,0 +1,8 @@
+When we add some data throw admin panel, this data save in our SQL DB, but when we make migrations, we haven't this datas.
+So, this is HowTo about how save/load data.
+
+To save your data make:
+python3 manage.py dumpdata --format=json > testproj/fixtures/<nameoffile.json>
+
+To load your data make:
+python3 manage.py loaddata <nameoffile.json>
