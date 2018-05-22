@@ -59,7 +59,7 @@ class Ideas(models.Model):
     '''
     title = models.CharField(max_length=255) #unique=True)
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True, null=True)
-    content = HTMLField()
+    content = models.TextField() #content = HTMLField()
     status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='status_id')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_id')
     moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator_id', blank=True, null=True)
