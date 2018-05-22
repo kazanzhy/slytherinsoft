@@ -54,8 +54,11 @@ urlpatterns = [
             },
             name='blog_archive_week',
             ),
-    re_path(r'^tinymce/', include('tinymce.urls')),
+    re_path(r'^summernote/', include('django_summernote.urls')),
 ]
+
+if settings.DEBUG:
+     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'

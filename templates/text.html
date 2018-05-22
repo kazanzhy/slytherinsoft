@@ -1,3 +1,8 @@
+{{ foobar|safe }}
+<!-- include summernote css/js-->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.js"></script>
+
 <h2>{{ post.title }}</h2>
 
 <div class="content">
@@ -9,23 +14,24 @@
     </span>
 </div>
 
-{% if post.comment_set.all %}
-<h2>Comments</h2>
-<div class="comments">
-    {% for comment in post.comment_set.all %}
-        <span>
-            <a href="{{ comment.website }}">{{ comment.name }}</a> said on {{ comment.created_on }}
-        </span>
-        <p>
-            {{ comment.text }}
-        </p>
-    {% endfor %}
-</div>
-{% endif %}
+<!--{% if post.comment_set.all %}-->
+<!--<h2>Comments</h2>-->
+<!--<div class="comments">-->
+    <!--{% for comment in post.comment_set.all %}-->
+        <!--<span>-->
+            <!--<a href="{{ comment.website }}">{{ comment.name }}</a> said on {{ comment.created_on }}-->
+        <!--</span>-->
+        <!--<p>-->
+            <!--{{ comment.text }}-->
+        <!--</p>-->
+    <!--{% endfor %}-->
+<!--</div>-->
+<!--{% endif %}-->
 
-<br />
+<!--<br />-->
 
-<h2>Add Comment</h2>
+<h2>Add Idea</h2>
+
 
 <form action="" method="POST">
     {% csrf_token %}

@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.template.defaultfilters import slugify
-from tinymce.models import HTMLField
 
 
 class IdeaStatus(models.Model):
@@ -58,8 +57,8 @@ class Ideas(models.Model):
     '''
     title = models.CharField(max_length=255) #unique=True)
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True)
-    # content = models.TextField()
-    content = HTMLField()
+    content = models.TextField()
+    #content = HTMLField()
     status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='tostatus')
     author = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='author')
     #moderator = models.ForeignKey(ExtendendUser, on_delete=models.CASCADE, related_name='moderator')
