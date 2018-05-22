@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from social_django.models import UserSocialAuth
 from django import forms
@@ -12,7 +12,7 @@ from snowpenguin.django.recaptcha2.fields import ReCaptchaField
 from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 
 from .models import *
-from django.http import HttpResponse # For test
+from django.http import JsonResponse #, HttpResponse # For test
 
 @login_required
 def home(request):
@@ -69,34 +69,38 @@ def password(request):
     return render(request, 'password.html', {'form': form})
 
 
-def all_ideas(request):
+def ideas(request):
     '''
     Return list of all ideas
     '''
-    i_list = Ideas.objects.all() #every object of list have: 
-    #context = {'ideas_list': i_list}
-    #return render(request, 'ideas.html', context)
-    return HttpResponse('<p></p>'.join(map(str, i_list))) # For test
+    ideas_list = Ideas.objects.all() #every object of list have: 
+    context = {'ideas_list': ideas_list}
+    return render(request, 'testproj/ideas.html', context)
 
 
 def idea(request, idea_id):
     '''
     Return one idea with selected number
     '''
-    try: 
-        idea_id = int(idea_id)
-    except:
-        return HttpResponse('Not correct url') # For test
-    else:
-        if int(idea_id) < 1 or int(idea_id) > len (Ideas.objects.all()): 
-            return HttpResponse('This idea isn\'t created') # For test
-        else:
-            idea = Ideas.objects.get(id=idea_id)
-            return HttpResponse(str(idea)) # For test
+    idea = get_object_or_404(Ideas, pk=idea_id)
+    context = {'idea': idea}
+    return render(request, 'testproj/idea.html', context)
 
-    #context = {'idea': idea}
-    #return render(request, 'idea.html', context)
-    return HttpResponse(str(idea)) # For test
+
+def like(request, idea_id):
+    '''
+    Put like
+    '''
+    idea = get_object_or_404(Ideas, pk=idea_id)
+    if request.user in idea.likes.all():
+        idea.likes.remove(request.user)
+        liked = False
+    else:
+        idea.likes.add(request.user)
+        liked = True
+    idea.save()
+    context = {'liked': liked, 'idea_id': idea_id, 'likes': idea.likes.count()}
+    return JsonResponse(context)
 
 
 class FormWithCaptcha(forms.Form):
