@@ -20,12 +20,12 @@ django-recaptcha==1.4.0
 django-recaptcha2==1.0.3
 django-rest-auth==0.9.3
 django-rest-framework==0.1.0
+djangorestframework==3.8.2
 django-rest-swagger==2.0.7
 django-secure==1.0.1
 django-ssl-auth==2.0.1
 django-sslserver==0.20
 django-summernote==0.8.8.7
-djangorestframework==3.8.2
 entrypoints==0.2.3
 enum34==1.1.6
 gunicorn==19.8.1
@@ -99,6 +99,7 @@ six==1.11.0
 sklearn==0.0
 social-auth-app-django==2.1.0
 social-auth-core==1.7.0
+sorl-thumbnail==12.4.1
 system-service==0.3
 tensorflow==1.4.1
 tensorflow-tensorboard==0.4.0rc3

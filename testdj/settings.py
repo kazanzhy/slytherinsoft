@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'django_wysiwyg',
     # 'captcha',
     'snowpenguin.django.recaptcha2',
-
     'django_summernote',
+    'sorl.thumbnail'
 ]
 
 MIDDLEWARE = [

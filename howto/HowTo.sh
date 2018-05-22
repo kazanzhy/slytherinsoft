@@ -27,7 +27,7 @@ cd slytherinsoft
 pip3 install --upgrade pip
 pip3 install -r requirements.txt
 
-#mysql -u root -p < script.sql
+#sudo mysql -u root -p < script.sql
 #python3 manage.py makemigrations
 #sudo python3 manage.py migrate
 
