@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from django import forms
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
-from django.http import JsonResponse #, HttpResponse # For test
+from django.http import JsonResponse 
 from django.template import RequestContext
 
 from social_django.models import UserSocialAuth
