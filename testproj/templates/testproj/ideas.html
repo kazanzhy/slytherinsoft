@@ -1,5 +1,6 @@
+All approved ideas sorted by likes from max to min 
 <ul>
 {% for idea in ideas_list %}
-    <li>{{ idea.title }}</li>
+    <li><a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> have {{ idea.like_qty}} likes</li>
 {% endfor %}
 </ul>

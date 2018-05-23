@@ -1,6 +1,13 @@
 <p>Your username: {{ profile.user }}</p>
 <p>Is your profile verified: {{profile.is_verified}}</p>
-<p>Link to your profile: <a href="http://127.0.0.1:8000/user/{{ profile.user }}">http://127.0.0.1:8000/user/{{ profile.user }}</a></p>
-<p>Biography: {{ profile.bio }}</p>
+<p>Direct link to your profile: <a href="/user/{{ profile.user }}">/user/{{ profile.user }}</a></p>
+<p>Your biography: {{ profile.bio }}</p>
+<p>Your ideas:</p>
+
+<ul>
+{% for idea in ideas %}
+  <li><a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is "{{ idea.status }}"</li>
+{% endfor %}
+</ul> 
 
 
