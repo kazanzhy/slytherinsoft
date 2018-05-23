@@ -1,4 +1,10 @@
 <p>Username: {{ profile.user }}</p>
 <p>Is verified: {{profile.is_verified}}</p>
 <p>Biography: {{ profile.bio }}</p>
+<p>All ideas of {{ profile.user }}:</p>
+<ul>
+{% for idea in ideas %}
+  <li><a href="/idea/{{idea.pk}}/"> {{idea.title}} </a> is "{{ idea.status }}"</li>
+{% endfor %}
+</ul> 
 

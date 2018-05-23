@@ -7,7 +7,7 @@ from django import forms
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from django.http import JsonResponse 
 from django.template import RequestContext
-
+from django.core.paginator import Paginator
 # from captcha.fields import ReCaptchaField
 
 # from snowpenguin.django.recaptcha2.fields import ReCaptchaField
@@ -52,24 +52,38 @@ def password(request):
 
 def ideas(request):
     '''
-    Return list of all ideas
+    Return list of all approved ideas
     '''
+    if request.method == 'POST':
+        form = IdeasForm(request.user, request.POST)
+        if form.is_valid(): 
+            pass
+    else:
+        form = IdeasForm()
+    ideas_list = Ideas.objects.filter(is_approved=True).order_by('-likes') #every object of list have:
+    for idea in ideas_list:
+        idea.like_qty = idea.likes.count()
+    #pages = Paginator(ideas_list, 10) # 10 ideas on one page
+    context = {'ideas_list': ideas_list} # {'pages': pages, 'num_pages': pages.num_pages}
+    content = Ideas.content
+    return render(request, 'testproj/ideas.html', context)
 
+@login_required
+def new(request):
+    '''
+    Return list of all not approved ideas
+    '''
     if request.method == 'POST':
         form = IdeasForm(request.user, request.POST)
         if form.is_valid():
             pass
     else:
         form = IdeasForm()
-
-    ideas_list = Ideas.objects.all() #every object of list have:
-    for idea in ideas_list:
-        idea.like_qty = idea.likes.count()
-    context = {'ideas_list': ideas_list}
+    ideas_list = Ideas.objects.filter(is_approved=False).order_by('-edit_date')
+    #pages = Paginator(ideas_list, 10) # 10 ideas on one page
+    context = {'ideas_list': ideas_list} # {'pages': pages, 'num_pages': pages.num_pages}
     content = Ideas.content
-
-    return render(request, 'testproj/ideas.html', context)
-
+    return render(request, 'testproj/new.html', context)
 
 def idea(request, idea_id):
     '''
@@ -103,8 +117,10 @@ def user(request, username):
     '''
     Return profile of selected user
     '''
-    profile = ExtendedUser.objects.get(user__username=username)
-    context = {'profile': profile}
+    user = User.objects.get(username=username)
+    profile = ExtendedUser.objects.get(user=user)
+    ideas = Ideas.objects.filter(author=user)
+    context = {'profile': profile, 'ideas': ideas}
     return render(request, 'testproj/user.html', context)
 
 
@@ -113,9 +129,9 @@ def profile(request):
     '''
     Return user\'s own profile
     '''
-    print(dir(User.objects.get))
     profile = ExtendedUser.objects.get(user__username=request.user.username)
-    context = {'profile': profile}
+    ideas = Ideas.objects.filter(author=request.user)
+    context = {'profile': profile, 'ideas': ideas}
     return render(request, 'testproj/profile.html', context)
 
 

@@ -1,0 +1,6 @@
+All not approved ideas sorted by time of last editing from new to old
+<ul>
+{% for idea in ideas_list %}
+    <li><a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> created {{idea.create_date}}. Edited at {{idea.edit_date}} </li>
+{% endfor %}
+</ul>
