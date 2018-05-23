@@ -16,8 +16,8 @@ from django.template import RequestContext
 from django.views.generic.dates import MonthArchiveView
 from django.views.generic.dates import WeekArchiveView
 
-from testproj.models import *
-from testproj.forms import *
+from .models import *
+from .forms import *
 
 
 # class FormWithCaptcha(forms.Form):
@@ -99,23 +99,24 @@ def like(request, idea_id):
     return JsonResponse(context)
 
 
-# def user(request, username):
-#     '''
-#     Return profile of selected user
-#     '''
-#     profile = ExtendedUser.objects.get(user__username=username)
-#     context = {'profile': profile}
-#     return render(request, 'testproj/user.html', context)
-#
-# @login_required
-# def profile(request):
-#     '''
-#     Return user\'s own profile
-#     '''
-#     profile = ExtendedUser.objects.get(user__username=request.user.username)
-#     context = {'profile': profile}
-#     return render(request, 'testproj/profile.html', context)
+def user(request, username):
+    '''
+    Return profile of selected user
+    '''
+    profile = ExtendedUser.objects.get(user__username=username)
+    context = {'profile': profile}
+    return render(request, 'testproj/user.html', context)
 
+
+@login_required
+def profile(request):
+    '''
+    Return user\'s own profile
+    '''
+    print(dir(User.objects.get))
+    profile = ExtendedUser.objects.get(user__username=request.user.username)
+    context = {'profile': profile}
+    return render(request, 'testproj/profile.html', context)
 
 
 class IdeasMonthArchiveView(MonthArchiveView):
