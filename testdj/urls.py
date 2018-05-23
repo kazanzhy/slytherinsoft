@@ -32,18 +32,16 @@ urlpatterns = [
     re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^account_login/$', auth_views.login, name='registration/login'),
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
-    # re_path(r'^oauth/', include('social_django.urls', namespace='social')),  # <--
     
     re_path(r'^ideas/$', views.ideas),
     re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
     re_path(r'^like/(?P<idea_id>[0-9]+)/', views.like),
-    re_path(r'^profile/', views.profile),
-    re_path(r'^user/(?P<username>\w+)/', views.user),
+    # re_path(r'^profile/', views.profile),
+    # re_path(r'^user/(?P<username>\w+)/', views.user),
 
     re_path(r'^$', views.home, name='home'),
 
-    re_path(r'^post/(?P<slug>[-\w]+)$', views.view_post, name='blog_post_detail'),
-    re_path(r'^add/post/', views.add_post, name='text'),
+
     re_path(r'^archive/month/(?P<year>\d+)/(?P<month>\w+)$', IdeasMonthArchiveView.as_view(month_format='%m'),
             {'queryset': Ideas.objects.all(), 'date_field': 'created_on'}, name='blog_archive_month'),
     re_path(r'^archive/week/(?P<year>\d+)/(?P<week>\d+)$', IdeasWeekArchiveView,
