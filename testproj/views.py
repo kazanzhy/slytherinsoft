@@ -84,9 +84,14 @@ def ideas(request):
     '''
     Return list of all ideas
     '''
-    ideas_list = Ideas.objects.all() #every object of list have: 
+    ideas_list = Ideas.objects.filter(is_approved=True) #every object of list have: 
     for idea in ideas_list:
         idea.like_qty = idea.likes.count()
+        if request.user in idea.likes.all():
+            idea.liked = True
+        else:
+            idea.liked = False
+        
     context = {'ideas_list': ideas_list}
     return render(request, 'testproj/ideas.html', context)
 
@@ -115,7 +120,7 @@ def like(request, idea_id):
         idea.likes.add(request.user)
         liked = True
     idea.save()
-    context = {'liked': liked, 'idea_id': idea_id, 'likes': idea.likes.count()}
+    context = {'liked': liked, 'id': idea_id, 'likes': idea.likes.count()}
     return JsonResponse(context)
 
 

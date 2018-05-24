@@ -1,5 +1,186 @@
-<ul>
-{% for idea in ideas_list %}
-<li>{{ idea.title }}</li>
-{% endfor %}
-</ul>
+{% load static %}
+{% load thumbnail %}
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Welocome to IdeaMetr</title>
+	<link href="{% static 'css/main.css' %}" rel="stylesheet"></head>
+	<link href="{% static '/fonts/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css' %}" rel="stylesheet"></head>
+	
+<body>
+	<header>
+
+			<div id="search">
+				<div id="search_wrapper">
+					<input type="text" id="search_input" placeholder="&#61447 search...">
+					<div id="search-icon"><i class="fas fa-search"></i></div>
+					<div class="devider"></div>
+					<a href="#" id="my_account_link"><i class="fas fa-user-circle"></i>  My Account</a>
+				</div>
+			</div>
+
+			<div id="login">
+				<a href="#" id="login_url">Вход / Регистрация</a>
+				<div id="social_links">
+					<a href="#"><i class="fab fa-facebook-f"></i></a>
+					<a href="#"><i class="fab fa-twitter"></i></a>
+					<a href="#"><i class="fab fa-linkedin-in"></i></a>
+					<a href="#"><i class="fab fa-google-plus-g"></i></a>
+				</div>
+				<div id="login_controls">
+					<input type="text" id="login_input" placeholder="login">
+					<input type="password" id="password_input" placeholder="password">
+					<button id="login_button">Login!</button>
+				</div>
+			</div>
+			<div id="content_switcher">
+				<div id="content_switcher_links">
+					<a href="" class="active">All</a>
+					<div class="devider"></div>
+					<a href="">New</a>
+					<div class="devider"></div>
+					<a href="">The Best</a>
+				</div>
+			</div>
+			
+
+	</header>
+	<section id="categories">
+		<div id="categories_wrapper">
+			<a href="">Sport</a>
+			<a href="">Design</a>
+			<a href="">Fasion</a>
+			<a href="">Games</a>
+			<a href="">ART</a>
+			<a href="">Buisness</a>
+			<a href="" class="active">Technology</a>
+		</div>
+	</section>
+
+	<section id="content">
+		<h1>Technology</h1>
+		<select name="" id="category_switcher_input">
+			<option value="">All</option>
+			<option value="">New</option>
+			<option value="">Best</option>
+		</select>
+		<div id="content_wrapper">
+			{% for idea in ideas_list %}
+			<div class="idea_card">
+				<div class="idea_content">
+	
+					{% thumbnail idea.cover "320x240" crop="center" as im %}			
+    				<img src="{{ im.url }}" alt="">
+					{% endthumbnail %}
+					
+					<h3>{{idea.title}}</h3>
+					<div class="heading-devider"></div>				
+					<p>{{idea.content|striptags|truncatechars:250 }}<a href="#">подробнее...</a></p>
+				</div>
+				
+				<div class="idea_meta">
+					<span><b>90%</b> cобрано</span>
+					<form action="{% url 'idea_like' idea.id %}" class="like_form" method="GET">
+						<button 
+							action="submit" 
+							id={{idea.id}}_like>
+							<span>{{idea.like_qty}}</span><i class="{% if idea.liked %} fas {% else %} far {% endif %} fa-thumbs-up"></i>
+						</button>
+					</form>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div id="load_more_ideas">
+			<a href=""><i class="fas fa-undo-alt"></i> Load more Ideas</a>
+		</div>
+	</section>
+	<section id="best_ideas">
+		<h3 id="best_idea_heading">Best Ideas</h3>
+		<div id="best_deas_slider">
+			<div id="best_idea_left" class="best_idea_slider_controls">
+				<i class="fas fa-chevron-left"></i>
+			</div>
+			<div id="best_idea_cards">
+				{% for idea in ideas_list|slice:"0:3" %}
+				<div class="idea_card">
+					<div class="idea_content">
+						{% thumbnail idea.cover "320x240" crop="center" as im %}			
+    					<img src="{{ im.url }}" alt="">
+						{% endthumbnail %}
+						<h3>{{idea.title}}</h3>
+						<div class="heading-devider"></div>				
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt laboriosam dolorem, fugiat quaerat voluptatum ut, est nihil dicta eaque, veritatis eos consectetur ipsa ad id, dolorum delectus velit blanditiis! Omnis...<a href="#">подробнее...</a></p>
+					</div>
+					
+					<div class="idea_meta">
+						<span><b>90%</b> cобрано</span>
+						<span><a href=""><i class="far fa-thumbs-up"></i></a>(90)</span>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			<div id="best_idea_right" class="best_idea_slider_controls">
+				<i class="fas fa-chevron-right"></i>
+			</div>
+		</div>
+		
+	</section>
+	<section id="categories">
+		<div id="categories_wrapper">
+			<a href="">Sport</a>
+			<a href="">Design</a>
+			<a href="">Fasion</a>
+			<a href="">Games</a>
+			<a href="">ART</a>
+			<a href="">Buisness</a>
+			<a href="" class="active">Technology</a>
+		</div>
+	</section>
+
+	<footer>
+		
+		<div>
+			<ul>
+				<li class="foot_head">Our Project</li>
+				<li>About us</li>
+				<li>Our Mission</li>
+				<li>Vacansy</li>
+			</ul>
+		</div>
+		
+		<div>
+			<ul>
+				<li class="foot_head">Support</li>
+				<li><a href="">Usage rules</a></li>
+				<li><a href="">Contact</a></li>
+				<li><a href="">Contact</a></li>
+			</ul>
+		</div>
+		
+		<div>
+			<a href="">Confidential Politics</a>
+		</div>
+		
+		<div class="social_and_logo">
+			<div>
+				<a href="#"><i class="fab fa-facebook-f"></i></a>
+				<a href="#"><i class="fab fa-twitter"></i></a>
+				<a href="#"><i class="fab fa-google-plus-g"></i></a>
+			</div>
+			<div>IdeaMETR</div>
+		</div>
+	</footer>
+	
+	<div id="to_top">
+		<a href="#categories"><i class="fas fa-chevron-up"></i></a>
+	</div>
+
+<script src="{% static 'js/fontawesome-all.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bundle.js' %}"></script></body>
+</html>
