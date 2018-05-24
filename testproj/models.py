@@ -12,7 +12,7 @@ class IdeaStatus(models.Model):
 
     def __str__(self):
         return self.status
-    
+
     class Meta:
         db_table = 'ideastatus'
         verbose_name = "Idea Status"
@@ -38,9 +38,9 @@ class ExtendedUser(models.Model):
     '''
     Users. Extends of standard model
     '''
-    user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Standart User model
     bio = models.TextField(default='Info about me')
-    #link = models.CharField(max_length=255, unique=True)
+    # link = models.CharField(max_length=255, unique=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_id', blank=True)
     is_verified = models.BooleanField(default=False)
 
@@ -55,11 +55,11 @@ class ExtendedUser(models.Model):
 
 class Ideas(models.Model):
     '''
-    Ideas. 
+    Ideas.
     '''
-    title = models.CharField(max_length=255) #unique=True)
+    title = models.CharField(max_length=255)  # unique=True)
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True, null=True)
-    content = models.TextField() #content = HTMLField()
+    content = models.TextField()  # content = HTMLField()
     status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='status_id')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_id')
     moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator_id', blank=True, null=True)
@@ -67,7 +67,7 @@ class Ideas(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, blank=True)
-    views = models.PositiveIntegerField(default=0)    
+    views = models.PositiveIntegerField(default=0)
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -88,10 +88,6 @@ class Ideas(models.Model):
     class Meta:
         db_table = 'ideas'
         verbose_name = "Ideas"
-        verbose_name_plural = "Ideas"
 
 
-
-
-
-
+verbose_name_plural = "Ideas"
