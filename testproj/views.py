@@ -50,7 +50,7 @@ def password(request):
     return render(request, 'password.html', {'form': form})
 
 
-def ideas(request):
+def ideas(request, page_number):
     '''
     Return list of all approved ideas
     '''
@@ -64,12 +64,17 @@ def ideas(request):
     for idea in ideas_list:
         idea.like_qty = idea.likes.count()
     #pages = Paginator(ideas_list, 10) # 10 ideas on one page
-    context = {'ideas_list': ideas_list} # {'pages': pages, 'num_pages': pages.num_pages}
+    #if page_number in pages.page_range:
+        #ideas_list = pages.page(page_number)
+    #else:
+        #ideas_list = pages.page(1)
+    #context = {'ideas_list': ideas_list, 'page_number': page_number} # ideas_list have .has_previous() and .has_next()
+    context = {'ideas_list': ideas_list}
     content = Ideas.content
     return render(request, 'testproj/ideas.html', context)
 
 @login_required
-def new(request):
+def new(request, page_number):
     '''
     Return list of all not approved ideas
     '''
@@ -81,6 +86,11 @@ def new(request):
         form = IdeasForm()
     ideas_list = Ideas.objects.filter(is_approved=False).order_by('-edit_date')
     #pages = Paginator(ideas_list, 10) # 10 ideas on one page
+    #if page_number in pages.page_range:
+        #ideas_list = pages.page(page_number)
+    #else:
+        #ideas_list = pages.page(1)
+    #context = {'ideas_list': ideas_list, 'page_number': page_number} # ideas_list have .has_previous() and .has_next()
     context = {'ideas_list': ideas_list} # {'pages': pages, 'num_pages': pages.num_pages}
     content = Ideas.content
     return render(request, 'testproj/new.html', context)
