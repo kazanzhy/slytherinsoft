@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-
+from django.http import HttpResponseRedirect
 from django import forms
-from django.shortcuts import render, redirect, render_to_response, get_object_or_404
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404, HttpResponse
 from django.http import JsonResponse 
 from django.template import RequestContext
 from django.core.paginator import Paginator
@@ -17,8 +17,11 @@ from django.views.generic.dates import MonthArchiveView
 from django.views.generic.dates import WeekArchiveView
 
 from .models import *
-from .forms import *
+# from .forms import *
 
+# add for form  view
+from .forms import AddIdeaAuthorized
+from django.contrib.auth.models import User
 
 # class FormWithCaptcha(forms.Form):
 #     captcha = ReCaptchaField()
@@ -93,7 +96,7 @@ def idea(request, idea_id):
     idea.views += 1
     idea.save()
     idea.like_qty = idea.likes.count()
-    context = {'idea': idea}
+    context = {'idea': idea.content}
     return render(request, 'testproj/idea.html', context)
 
 @login_required
@@ -147,3 +150,27 @@ class IdeasWeekArchiveView(WeekArchiveView):
     week_format = "%W"
     allow_future = False
 
+# add new idea if user is authorized
+@login_required
+def add_idea_auth(request):
+    # idea_auth = get_object_or_404(Ideas, pk=pk)
+    saved = False
+    if request.method == 'POST':
+        form = AddIdeaAuthorized(request.POST, request.FILES)
+        if form.is_valid():
+            # idea_auth.title = form.cleaned_data['idea_title_auth']
+            # idea_auth.save()
+            m = Ideas()
+            m.title = form.cleaned_data['ideaadd_title_auth']
+            m.cover = form.cleaned_data['ideaadd_cover_auth']
+            m.content = form.cleaned_data['ideaadd_text_auth']
+            m.status = form.cleaned_data['ideaadd_status_auth']
+            m.author = User.objects.get()
+            m.save()
+            return HttpResponse('you idea upload success')
+            saved = True
+
+    else:
+        form = AddIdeaAuthorized()
+    # return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst': book_inst})
+    return render(request, 'testproj/add_idea_auth.html', {'form': form})
