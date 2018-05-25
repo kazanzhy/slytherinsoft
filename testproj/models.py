@@ -39,6 +39,9 @@ class ExtendedUser(models.Model):
     Users. Extends of standard model
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
+    firstname = models.CharField(on_delete=models.CASCADE, max_length=255, blank=True)
+    lastname = models.CharField(on_delete=models.CASCADE, max_length=255, blank=True)
+    city = models.CharField(on_delete=models.CASCADE, max_length=255, blank=True)
     bio = models.TextField(default='Info about me')
     #link = models.CharField(max_length=255, unique=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_id', blank=True)
