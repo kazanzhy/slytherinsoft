@@ -28,8 +28,8 @@ from testproj.views import IdeasMonthArchiveView, IdeasWeekArchiveView
 admin.autodiscover()
 
 ideas_patterns = [
-    url(r'^all/(?P<page_number>[0-9]+)', views.ideas),
-    url(r'^new/(?P<page_number>[0-9]+)', views.new),
+    url(r'^all/(?P<current_page>[0-9]+)', views.ideas),
+    url(r'^new/(?P<current_page>[0-9]+)', views.new),
     url(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
     ]
 
@@ -54,7 +54,7 @@ urlpatterns = [
     
     re_path(r'^ideas/', include(ideas_patterns)),
     re_path(r'^profile/', include(profile_patterns)),
-    re_path(r'^archive/', include(archive_patterns)
+    re_path(r'^archive/', include(archive_patterns)),
 
     re_path(r'^like/(?P<idea_id>[0-9]+)/', views.like), # Move to 'hidden_patterns'
 
