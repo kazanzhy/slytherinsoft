@@ -80,11 +80,13 @@
 					
 					<h3>{{idea.title}}</h3>
 					<div class="heading-devider"></div>				
-					<p>{{idea.content|striptags|truncatechars:250 }}<a href="#">подробнее...</a></p>
+					<p>{{idea.content|striptags|truncatechars:250 }}
+						<a href="{% url 'idea' idea_id=idea.id %}">подробнее...</a>
+					</p>
 				</div>
 				
 				<div class="idea_meta">
-					<span><b>90%</b> cобрано</span>
+					<span><b>{{idea.views}}</b> просмотров</span>
 					<form action="{% url 'idea_like' idea.id %}" class="like_form" method="GET">
 						<button 
 							action="submit" 

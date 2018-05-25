@@ -34,8 +34,8 @@ urlpatterns = [
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
     # re_path(r'^oauth/', include('social_django.urls', namespace='social')),  # <--
     
-    re_path(r'^ideas/$', views.ideas),
-    re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
+    re_path(r'^ideas/$', views.ideas, name="ideas"),
+    re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea, name="idea"),
     re_path(r'^like/(?P<idea_id>[0-9]+)/', views.like, name="idea_like"),
     re_path(r'^profile/', views.profile),
     re_path(r'^user/(?P<username>\w+)/', views.user),
