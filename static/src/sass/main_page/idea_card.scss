@@ -1,0 +1,66 @@
+.idea_card{
+	// background-color: #555;
+	border: 1px solid black;
+	min-height: 500px;
+	// min-width: 250	px;
+	// max-width: 350px;
+	margin: 10px 15px 10px 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items:center;
+
+	.idea_content{
+
+		display:flex;
+		flex-direction:column;
+		justify-content:flex-start;	
+		align-items:center;
+
+		img{
+			width:100%;
+			height:auto;
+		}
+
+		h3{
+			text-align: center;
+			margin: 10px 5px 10px 5px;
+		}
+
+		.heading-devider{
+			self-align: center;
+			border-bottom: 2px solid black;
+			width:30%;
+		}
+
+		p{
+			margin: 10px 5px 10px 5px;	
+		}
+	}
+
+	.idea_meta{
+		width:100%;
+		display:flex;
+		justify-content:space-between;
+		align-items:center;
+
+		button{
+			background: none;
+			border: none;
+			color: $purple;
+			font-size: 1.5em;
+			outline:none;
+		}
+
+		span{
+			margin: 10px;
+
+			font-size:1.2em;
+
+			a {
+				font-size:1.2em;
+			}
+		}
+	}
+
+}

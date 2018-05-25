@@ -1,0 +1,152 @@
+
+%login_controls{
+		margin-left: 5px;
+		padding:10px;
+		border:none;
+		background-color: white;
+		border-radius: 5px;
+		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);	
+}
+
+
+header{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    height:500px;
+    align-content: space-between;
+    justify-content: space-between;
+    background-color:#0191b3;
+    // background-image: url(/images/IdeaCover.png);
+    background-image: url(/static/img/IdeaCover.png);
+    background-repeat: no-repeat;
+    background-size: contain 250px;
+
+}
+
+
+
+#search {
+	grid-area: 1 / 3 / 2 / 4;
+	margin: 5px 10px 5px 10px;
+	display:flex;
+	justify-content:flex-end;
+	align-items:flex-start;
+}
+
+#search-icon{
+	display:none;
+	color:white;
+	font-size: 1.5em;
+}
+
+#search_wrapper{
+	display:flex;
+	justify-content:flex-end;
+	align-items:center;
+	margin: 10px 25px 0px 0px;
+}
+
+
+#my_account_link{
+	text-decoration: none;
+	color:white;
+	font-size:18px;
+	self-align:center;
+	white-space:nowrap;
+}
+
+#my_account_link:hover{
+	color:gray;
+}
+
+#my_account_link:visited{
+	color:white;
+}
+
+.devider{
+	border-left:2px solid white;
+	height:32px;
+	margin: 0 5px;
+}
+
+
+#login{
+	grid-area: 3/ 3/ 4 / 4;
+	// background-color:red;
+	display: grid;
+	grid-template-rows: 1fr 1fr 1fr;
+
+	#login_input, #password_input{
+		width: 25%;
+		@extend %login_controls
+	}
+
+	#login_button{
+		@extend %login_controls;
+		background-color: $purple;
+		color: white;
+		font-weight:650;	
+	}
+
+	#social_links{
+		margin-left: 5px;
+		
+		a {
+			color: $purple;
+			margin-left:5px;
+			font-size: 1.5em;
+		}
+	}
+
+
+	#login_url {
+		margin: 0px 0px 15px 5px;
+		color:white;
+		font-size: 24px;
+		text-decoration:none;
+		font-weight: 700;
+	}
+
+	#login_url :visited{
+		color:white;
+	}
+
+	#login_url :hover{
+		cursor: pointer;
+		color: gray;
+	}
+
+
+}
+
+
+
+#content_switcher{
+	grid-area: 4/ 3 / 5 / 4;
+	// background-color:red;
+	display:grid;
+	justify-content: end;
+	align-items:end;
+
+	#content_switcher_links{
+		display:flex;
+		margin: 5px 40px 30px 5px;
+		align-items: center;
+	}
+
+	.devider{
+		border-left:2px solid black;
+		height:25px;
+		margin: 0 15px;
+	}
+
+	.active{
+		color:black;
+		text-decoration: none;
+		font-weight:550;
+	}
+	a{
+		font-size:0.9em;
+	}
+}

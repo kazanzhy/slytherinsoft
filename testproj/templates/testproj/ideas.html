@@ -9,8 +9,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Welocome to IdeaMetr</title>
-	<link href="{% static 'css/main.css' %}" rel="stylesheet"></head>
-	<link href="{% static '/fonts/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css' %}" rel="stylesheet"></head>
+	<link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+</head>
 	
 <body>
 	<header>
@@ -65,9 +66,8 @@
 	<section id="content">
 		<h1>Technology</h1>
 		<select name="" id="category_switcher_input">
-			<option value="">All</option>
-			<option value="">New</option>
-			<option value="">Best</option>
+			<option value="All">All</option>
+			<option value="Best">Best</option>
 		</select>
 		<div id="content_wrapper">
 			{% for idea in ideas_list %}
@@ -183,6 +183,7 @@
 		<a href="#categories"><i class="fas fa-chevron-up"></i></a>
 	</div>
 
-<script src="{% static 'js/fontawesome-all.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bundle.js' %}"></script></body>
+
+
+<script type="module" src="{% static 'js/index.js' %} "></script></body>
 </html>

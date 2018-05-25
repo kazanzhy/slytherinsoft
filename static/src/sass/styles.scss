@@ -1,0 +1,24 @@
+//basic
+
+@import "../fonts/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css";
+
+@import "./_colors.scss";
+@import "./base.scss";
+
+//main pages
+@import "./main_page/header.scss";
+@import "./main_page/categories.scss";
+@import "./main_page/content.scss";
+@import "./main_page/idea_card.scss";
+@import "./main_page/best_ideas.scss";
+@import "./main_page/to_top.scss";
+
+//footer
+@import "./footer/footer.scss";
+
+//search imput
+@import "./search_input/search_input.scss";
+
+//navbar
+@import "./navbar/navbar.scss";
+@import "./navbar/like_button.scss";

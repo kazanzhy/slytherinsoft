@@ -1,0 +1,24 @@
+#search_input{
+	background:none;
+	background-color: white;
+	border: none;
+	height:24px;
+	width:150px;
+	border-radius:20px;
+	padding: 4px 2px 4px 6px;
+	self-align:center;
+	font-family: "Font Awesome 5 Free"; 
+
+}
+
+
+
+@media (max-width: 960px) {	
+	#search_input{
+		display: none;
+	}
+
+	#search-icon{
+		display: block;
+		}
+}

@@ -1,0 +1,34 @@
+#best_ideas{
+	
+	margin: 10px 20px 10px 20px;
+
+	#best_idea_heading {
+		text-align: center;
+		font-size: 2em;
+	}
+}
+
+
+#best_deas_slider {
+
+	// margin: 0px 50px 0px 50px;
+	display: grid;
+	grid-template-columns: 30px auto 30px;
+	align-content:center;
+	align-items: center;
+	justify-content: center;
+
+
+	.best_idea_slider_controls{
+		font-size: 3em;
+	}
+
+	.idea_card{
+		min-height: 350px;
+	}
+}
+
+#best_idea_cards {
+	display: flex;
+	justify-content: center;
+}
