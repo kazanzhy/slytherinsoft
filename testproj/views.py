@@ -50,47 +50,30 @@ def password(request):
     return render(request, 'password.html', {'form': form})
 
 
-def ideas(request, current_page):
+def ideas(request):
     '''
     Return list of all approved ideas
     '''
-    if request.method == 'POST':
-        form = IdeasForm(request.user, request.POST)
-        if form.is_valid(): 
-            pass
+    if 'display' in request.GET and request.GET['display'] == 'best':
+        ideas_list = Ideas.objects.filter(is_approved=True).order_by('-create_date', '-likes')[:30]
+        current_page = 1
+        num_pages = 1
     else:
-        form = IdeasForm()
-    ideas_list = Ideas.objects.filter(is_approved=True).order_by('-likes') #every object of list have:
+        if 'page' in request.GET:
+            current_page = int(request.GET['page'])
+        else:
+            current_page = 1  
+        ideas_list = Ideas.objects.filter(is_approved=True)
+        pages = Paginator(ideas_list, 30) # 30 ideas on one page
+        if current_page not in pages.page_range:
+            current_page = 1
+        ideas_list = pages.page(current_page) # ideas_list have .has_previous() and .has_next()
+        num_pages = pages.num_pages
     for idea in ideas_list:
         idea.like_qty = idea.likes.count()
-    pages = Paginator(ideas_list, 30) # 30 ideas on one page
-    if current_page not in pages.page_range:
-        current_page = 1
-    ideas_list = pages.page(current_page) # ideas_list have .has_previous() and .has_next()
-    context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': pages.num_pages} 
-    content = Ideas.content
+    context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
     return render(request, 'testproj/ideas.html', context)
 
-@login_required
-def new(request, current_page):
-    '''
-    Return list of all not approved ideas
-    '''
-    if request.method == 'POST':
-        form = IdeasForm(request.user, request.POST)
-        if form.is_valid():
-            pass
-    else:
-        form = IdeasForm()
-    ideas_list = Ideas.objects.filter(is_approved=False).order_by('-edit_date')
-    pages = Paginator(ideas_list, 30) # 30 ideas on one page
-    if current_page not in pages.page_range:
-        current_page = 1
-    ideas_list = pages.page(current_page) # ideas_list have .has_previous() and .has_next()
-    context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': pages.num_pages} 
-    content = Ideas.content
-    content = Ideas.content
-    return render(request, 'testproj/new.html', context)
 
 def idea(request, idea_id):
     '''

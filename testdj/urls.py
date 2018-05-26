@@ -27,11 +27,6 @@ from testproj.views import IdeasMonthArchiveView, IdeasWeekArchiveView
 # from testproj.core import views as core views
 admin.autodiscover()
 
-ideas_patterns = [
-    url(r'^all/(?P<current_page>[0-9]+)', views.ideas),
-    url(r'^new/(?P<current_page>[0-9]+)', views.new),
-    url(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
-    ]
 
 profile_patterns = [
     url(r'^my/', views.profile),
@@ -52,7 +47,8 @@ urlpatterns = [
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
     re_path(r'^summernote/', include('django_summernote.urls')),
     
-    re_path(r'^ideas/', include(ideas_patterns)),
+    re_path(r'^ideas/', views.ideas),
+    re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
     re_path(r'^profile/', include(profile_patterns)),
     re_path(r'^archive/', include(archive_patterns)),
 
