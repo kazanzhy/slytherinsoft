@@ -25,7 +25,7 @@ SECRET_KEY = '^^^j98u*f@rht$&m#ew8-^yypt6j&fd%p+@s_q82ec^u%nr$$('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['slytherin.ideas', '127.0.0.1', 'slytherin.org']
+ALLOWED_HOSTS = ['slytherin.ideas', '127.0.0.1', 'slytherin.org', '*']
 
 
 # Application definition
@@ -154,14 +154,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    '/var/www/slytherin.ideas/static/',
-]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'slytherinsoft/media')
 
 # AUTHENTICATION_BACKENDS = (
 #     "django.contrib.auth.backends.ModelBackend",
@@ -190,3 +188,11 @@ SITE_ID = 1
 RECAPTCHA_PUBLIC_KEY = '6LfkSVUUAAAAAOUK4pExTdM8PtZLinE4d1_O3Q4n'
 RECAPTCHA_PRIVATE_KEY = '6LfkSVUUAAAAAEp295UbbKhlqtaFyHIf8wpSzH4g'
 
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ttn.od.ua@gmail.com'
+EMAIL_HOST_PASSWORD = 'venjkJ<le675FV'
+DEFAULT_FROM_EMAIL = 'ttn.od.ua@gmail.com'
+DEFAULT_TO_EMAIL = 'lagutin.igor@gmail.com'

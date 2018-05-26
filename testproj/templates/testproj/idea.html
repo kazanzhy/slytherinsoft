@@ -1,1 +1,12 @@
-{{ idea.title }} has {{idea.like_qty}} likes
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{idea.title}}</title>
+</head>
+<body>
+	<h1>{{idea.title}}</h1>
+	<p>{{idea.content}}</p>
+	<a href="{% url 'ideas' %}"><---back</a>
+</body>
+</html>

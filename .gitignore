@@ -103,3 +103,7 @@ testproj/migrations
 .mypy_cache/
 
 migrations/
+media/*
+static/admin/
+
+static/src/.sass-cache/
