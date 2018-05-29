@@ -8,10 +8,6 @@ from django.shortcuts import render, redirect, render_to_response, get_object_or
 from django.http import JsonResponse 
 from django.template import RequestContext
 from django.core.paginator import Paginator
-# from captcha.fields import ReCaptchaField
-
-# from snowpenguin.django.recaptcha2.fields import ReCaptchaField
-# from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 
 from django.views.generic.dates import MonthArchiveView
 from django.views.generic.dates import WeekArchiveView
@@ -22,9 +18,6 @@ from .models import *
 # add for form  view
 from .forms import AddIdeaAuthorized
 from django.contrib.auth.models import User
-
-# class FormWithCaptcha(forms.Form):
-#     captcha = ReCaptchaField()
 
 
 @login_required
@@ -158,8 +151,6 @@ def add_idea_auth(request):
     if request.method == 'POST':
         form = AddIdeaAuthorized(request.POST, request.FILES)
         if form.is_valid():
-            # idea_auth.title = form.cleaned_data['idea_title_auth']
-            # idea_auth.save()
             m = Ideas()
             m.title = form.cleaned_data['ideaadd_title_auth']
             m.cover = form.cleaned_data['ideaadd_cover_auth']
