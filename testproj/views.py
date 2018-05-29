@@ -19,6 +19,7 @@ from .models import *
 from .forms import AddIdeaAuthorized
 from django.contrib.auth.models import User
 
+from django.db.models.signals import pre_save
 
 @login_required
 def home(request):
@@ -143,11 +144,15 @@ class IdeasWeekArchiveView(WeekArchiveView):
     week_format = "%W"
     allow_future = False
 
+
+
+
+
 # add new idea if user is authorized
 @login_required
 def add_idea_auth(request):
     # idea_auth = get_object_or_404(Ideas, pk=pk)
-    saved = False
+
     if request.method == 'POST':
         form = AddIdeaAuthorized(request.POST, request.FILES)
         if form.is_valid():
@@ -155,13 +160,35 @@ def add_idea_auth(request):
             m.title = form.cleaned_data['ideaadd_title_auth']
             m.cover = form.cleaned_data['ideaadd_cover_auth']
             m.content = form.cleaned_data['ideaadd_text_auth']
-            m.status = form.cleaned_data['ideaadd_status_auth']
+            # m.status = form.cleaned_data['ideaadd_status_auth']
+            m.status = ['just created']
             m.author = User.objects.get()
             m.save()
             return HttpResponse('you idea upload success')
-            saved = True
 
     else:
         form = AddIdeaAuthorized()
-    # return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst': book_inst})
     return render(request, 'testproj/add_idea_auth.html', {'form': form})
+
+
+@receiver(post_save, sender=Ideas)
+def my_function_post_save(sender, **kwargs):
+    if request.method == 'POST':
+        form = AddIdeaAuthorized(request.POST, request.FILES)
+        if form.is_valid():
+            m = Ideas()
+            m.title = form.cleaned_data['ideaadd_title_auth']
+            m.cover = form.cleaned_data['ideaadd_cover_auth']
+            m.content = form.cleaned_data['ideaadd_text_auth']
+            # m.status = form.cleaned_data['ideaadd_status_auth']
+            m.status = ['just created']
+            m.author = User.objects.get()
+            m.save()
+            return HttpResponse('you idea upload success')
+
+    else:
+        form = AddIdeaAuthorized()
+    return render(request, 'testproj/add_idea_auth.html', {'form': form})
+
+
+post_save.connect(my_function_post_save, sender=Ideas)

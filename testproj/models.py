@@ -4,21 +4,6 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
 
-class IdeaStatus(models.Model):
-    '''
-    Idea statuses. One row - one status (just created, edited, approved, declined)
-    '''
-    status = models.CharField(unique=True, max_length=255)
-
-    def __str__(self):
-        return self.status
-    
-    class Meta:
-        db_table = 'ideastatus'
-        verbose_name = "Idea Status"
-        verbose_name_plural = "Idea Statuses"
-
-
 class Role(models.Model):
     '''
     Roles of users. One row - one role (architect, moderator, user, banned)
@@ -39,9 +24,9 @@ class ExtendedUser(models.Model):
     Users. Extends of standard model
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
-    firstname = models.CharField(on_delete=models.CASCADE, max_length=255, blank=True)
-    lastname = models.CharField(on_delete=models.CASCADE, max_length=255, blank=True)
-    city = models.CharField(on_delete=models.CASCADE, max_length=255, blank=True)
+    firstname = models.CharField(max_length=255, blank=True)
+    lastname = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
     bio = models.TextField(default='Info about me')
     # link = models.CharField(max_length=255, unique=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_id', blank=True)
@@ -60,12 +45,20 @@ class Ideas(models.Model):
     '''
     Ideas. 
     '''
+
+    IDEA_STATUSES = (
+                ('JS', 'just created'),
+                ('AP', 'approved'),
+                ('DC', 'declined')
+            )
+
     title = models.CharField(max_length=255) #unique=True)
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True, null=True)
     content = models.TextField() #content = HTMLField()
-    status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='status_id')
+    # status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='status_id')
+    status = models.CharField(unique=True, max_length=2, choices=IDEA_STATUSES, default='JS')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_id')
-    moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator_id', blank=True, null=True)
+    # moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator_id', blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)

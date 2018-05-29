@@ -32,7 +32,9 @@ urlpatterns = [
     re_path(r'^accounts/', include('allauth.urls')),
     re_path(r'^account_login/$', auth_views.login, name='registration/login'),
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
-    
+
+    re_path(r'^addidea/$', views.add_idea_auth, name='testproj/add_idea_auth'),
+
     re_path(r'^ideas/$', views.ideas),
     re_path(r'^new/$', views.new),
     re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
