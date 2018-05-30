@@ -145,9 +145,6 @@ class IdeasWeekArchiveView(WeekArchiveView):
     allow_future = False
 
 
-
-
-
 # add new idea if user is authorized
 @login_required
 def add_idea_auth(request):
@@ -169,26 +166,3 @@ def add_idea_auth(request):
     else:
         form = AddIdeaAuthorized()
     return render(request, 'testproj/add_idea_auth.html', {'form': form})
-
-
-@receiver(post_save, sender=Ideas)
-def my_function_post_save(sender, **kwargs):
-    if request.method == 'POST':
-        form = AddIdeaAuthorized(request.POST, request.FILES)
-        if form.is_valid():
-            m = Ideas()
-            m.title = form.cleaned_data['ideaadd_title_auth']
-            m.cover = form.cleaned_data['ideaadd_cover_auth']
-            m.content = form.cleaned_data['ideaadd_text_auth']
-            # m.status = form.cleaned_data['ideaadd_status_auth']
-            m.status = ['just created']
-            m.author = User.objects.get()
-            m.save()
-            return HttpResponse('you idea upload success')
-
-    else:
-        form = AddIdeaAuthorized()
-    return render(request, 'testproj/add_idea_auth.html', {'form': form})
-
-
-post_save.connect(my_function_post_save, sender=Ideas)
