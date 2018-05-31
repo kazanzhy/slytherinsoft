@@ -28,11 +28,6 @@ from testproj.views import IdeasMonthArchiveView, IdeasWeekArchiveView
 admin.autodiscover()
 
 
-profile_patterns = [
-    url(r'^my/', views.profile),
-    url(r'^(?P<username>\w+)/', views.user),
-    ]
-
 archive_patterns = [
     url(r'^month/(?P<year>\d+)/(?P<month>\w+)$', IdeasMonthArchiveView.as_view(month_format='%m'),
         {'queryset': Ideas.objects.all(), 'date_field': 'created_on'}, name='blog_archive_month'),
@@ -47,9 +42,10 @@ urlpatterns = [
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
     re_path(r'^summernote/', include('django_summernote.urls')),
     
-    re_path(r'^ideas/', views.ideas),
-    re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
-    re_path(r'^profile/', include(profile_patterns)),
+    re_path(r'^ideas/', views.ideas, name='ideas'),
+    re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea, name='idea'),
+    re_path(r'^profile/my', views.profile, name='profile'),
+    re_path(r'^profile/(?P<username>\w+)/', views.user, name='user'),
     re_path(r'^archive/', include(archive_patterns)),
 
     re_path(r'^like/(?P<idea_id>[0-9]+)/', views.like), # Move to 'hidden_patterns'
