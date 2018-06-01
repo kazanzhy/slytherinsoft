@@ -57,7 +57,7 @@ def ideas(request):
     if 'display' in request.GET and request.GET['display'] == 'best':
         ideas_list = Ideas.objects.filter(is_approved=True).order_by('-create_date', '-likes')[:30]
         current_page = 1
-        num_pages = 1
+        num_pages = [1]
     else:
         if 'page' in request.GET:
             current_page = int(request.GET['page'])
@@ -68,7 +68,7 @@ def ideas(request):
         if current_page not in pages.page_range:
             current_page = 1
         ideas_list = pages.page(current_page) # ideas_list have .has_previous() and .has_next()
-        num_pages = pages.num_pages
+        num_pages = pages.page_range
     for idea in ideas_list:
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
