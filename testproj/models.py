@@ -4,49 +4,25 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
 
-class IdeaStatus(models.Model):
-    '''
-    Idea statuses. One row - one status (just created, edited, approved, declined)
-    '''
-    status = models.CharField(unique=True, max_length=255)
-
-    def __str__(self):
-        return self.status
-    
-    class Meta:
-        db_table = 'ideastatus'
-        verbose_name = "Idea Status"
-        verbose_name_plural = "Idea Statuses"
-
-
-class Role(models.Model):
-    '''
-    Roles of users. One row - one role (architect, moderator, user, banned)
-    '''
-    role = models.CharField(unique=True, max_length=255)
-
-    def __str__(self):
-        return self.role
-
-    class Meta:
-        db_table = 'roles'
-        verbose_name = "Roles"
-        verbose_name_plural = "Roles"
-
-
 class ExtendedUser(models.Model):
     '''
     Users. Extends of standard model
     '''
-    user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
-    firstname = models.CharField(max_length=255, blank=True)
-    lastname = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    bio = models.TextField(default='Info about me')
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null = True) # Standart User model
+    firstname = models.CharField(max_length=255, blank=True, help_text="Enter your firstname")
+    lastname = models.CharField(max_length=255, blank=True, help_text="Enter your lastname")
+    city = models.CharField(max_length=255, blank=True, help_text="Enter city where you live")
+    bio = models.TextField(blank=True, help_text="Enter some info about you")
     #link = models.CharField(max_length=255, unique=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_id', blank=True)
     is_moderator = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
+    USER_ROLE = (
+        ('a', 'architect'),
+        ('m', 'moderator'),
+        ('u', 'User'),
+        ('b', 'Banned'),
+    )
+    role = models.CharField(max_length=1, choices=USER_ROLE, blank=True, default='u', help_text='User role')
 
     def __str__(self):
         return '{} ({})'.format(self.user, self.role, self.is_verified)
@@ -61,10 +37,9 @@ class Ideas(models.Model):
     '''
     Ideas. 
     '''
-    title = models.CharField(max_length=255) #unique=True)
+    title = models.CharField(max_length=255, help_text="Enter the title of your idea") #unique=True)
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True, null=True)
-    content = models.TextField() #content = HTMLField()
-    status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='status_id')
+    content = models.TextField(help_text="Describe your idea here") #content = HTMLField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_id')
     moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator_id', blank=True, null=True)
     is_approved = models.BooleanField(default=False)
@@ -73,6 +48,13 @@ class Ideas(models.Model):
     likes = models.ManyToManyField(User, blank=True)
     views = models.PositiveIntegerField(default=0)    
     slug = models.SlugField(unique=True)
+    IDEA_STATUS = (
+        ('c', 'Just created'),
+        ('e', 'Edited'),
+        ('a', 'Approved'),
+        ('d', 'Declined'),
+    )
+    status = models.CharField(max_length=1, choices=IDEA_STATUS, blank=True, default='c', help_text='Current status of idea')
 
     def __str__(self):
         return '"{}" by "{}" now is {}'.format(self.title, self.author, self.status)
