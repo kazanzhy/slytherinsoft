@@ -19,7 +19,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views import generic
-from django.conf.urls import include, url
 from testproj import views
 from testproj.models import Ideas
 from testproj.views import IdeasMonthArchiveView, IdeasWeekArchiveView
@@ -29,9 +28,9 @@ admin.autodiscover()
 
 
 archive_patterns = [
-    url(r'^month/(?P<year>\d+)/(?P<month>\w+)$', IdeasMonthArchiveView.as_view(month_format='%m'),
+    re_path(r'^month/(?P<year>\d+)/(?P<month>\w+)$', IdeasMonthArchiveView.as_view(month_format='%m'),
         {'queryset': Ideas.objects.all(), 'date_field': 'created_on'}, name='blog_archive_month'),
-    url(r'^week/(?P<year>\d+)/(?P<week>\d+)$', IdeasWeekArchiveView,
+    re_path(r'^week/(?P<year>\d+)/(?P<week>\d+)$', IdeasWeekArchiveView,
         {'queryset': Ideas.objects.all(), 'date_field': 'created_on'}, name='blog_archive_week'),
     ]
 
