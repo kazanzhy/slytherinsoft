@@ -43,6 +43,7 @@ urlpatterns = [
     
     re_path(r'^ideas/', views.ideas, name='ideas'),
     re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea, name='idea'),
+    re_path(r'^new/', views.new, name='new'),
     re_path(r'^profile/my', views.profile, name='profile'),
     re_path(r'^profile/(?P<username>\w+)/', views.user, name='user'),
     re_path(r'^archive/', include(archive_patterns)),

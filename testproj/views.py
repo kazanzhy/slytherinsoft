@@ -18,7 +18,8 @@ from django.views.generic.dates import WeekArchiveView
 
 from .models import *
 from .forms import *
-
+from django.contrib.auth.models import User
+from django.db.models.signals import pre_save
 
 # class FormWithCaptcha(forms.Form):
 #     captcha = ReCaptchaField()
