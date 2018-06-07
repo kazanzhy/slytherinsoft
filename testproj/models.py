@@ -41,7 +41,7 @@ class Ideas(models.Model):
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True, null=True)
     content = models.TextField(help_text="Describe your idea here") #content = HTMLField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_id')
-    moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator_id', blank=True, null=True)
+    # moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator_id', blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)

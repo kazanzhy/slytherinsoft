@@ -173,6 +173,9 @@ AUTOCREATE_VALID_SSL_USERS = True
 USER_DATA_FN = 'django_ssl_auth.fineid.user_dict_from_dn'
 
 
+SOCIAL_AUTH_FACEBOOK_KEY = '426863581058749'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'f6da39f6e2971f0d3019cccfc3bbed27'  # App Secret
+
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
@@ -180,6 +183,27 @@ SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_TWITTER_KEY = 'FWsI6HT7ElOn0zD3mJgktl7pU'
 SOCIAL_AUTH_TWITTER_SECRET = 'GWA1FE587c1d5mIClRqnzgzRrh2tWzIeIsvQGifOzuHVzQg7fQ'
 
+SOCIALACCOUNT_PROVIDERS = \
+    {'facebook':
+       {'METHOD': 'oauth2',
+        'SCOPE': ['email','public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'kr_KR',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.4'}}
 
 SITE_ID = 1
 

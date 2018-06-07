@@ -2,16 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-
+from django.http import HttpResponseRedirect
 from django import forms
-from django.shortcuts import render, redirect, render_to_response, get_object_or_404
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404, HttpResponse
 from django.http import JsonResponse 
 from django.template import RequestContext
 from django.core.paginator import Paginator
-# from captcha.fields import ReCaptchaField
-
-# from snowpenguin.django.recaptcha2.fields import ReCaptchaField
-# from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 
 from django.views.generic.dates import MonthArchiveView
 from django.views.generic.dates import WeekArchiveView
@@ -20,9 +16,6 @@ from .models import *
 from .forms import *
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save
-
-# class FormWithCaptcha(forms.Form):
-#     captcha = ReCaptchaField()
 
 
 @login_required
@@ -84,8 +77,9 @@ def idea(request, idea_id):
     idea.views += 1
     idea.save()
     idea.like_qty = idea.likes.count()
-    context = {'idea': idea}
+    context = {'idea': idea.content}
     return render(request, 'testproj/idea.html', context)
+
 
 @login_required
 def like(request, idea_id):
@@ -138,3 +132,25 @@ class IdeasWeekArchiveView(WeekArchiveView):
     week_format = "%W"
     allow_future = False
 
+
+# add new idea if user is authorized
+@login_required
+def add_idea_auth(request):
+    # idea_auth = get_object_or_404(Ideas, pk=pk)
+
+    if request.method == 'POST':
+        form = AddIdeaAuthorized(request.POST, request.FILES)
+        if form.is_valid():
+            m = Ideas()
+            m.title = form.cleaned_data['ideaadd_title_auth']
+            m.cover = form.cleaned_data['ideaadd_cover_auth']
+            m.content = form.cleaned_data['ideaadd_text_auth']
+            # m.status = form.cleaned_data['ideaadd_status_auth']
+            m.status = ['just created']
+            m.author = User.objects.get()
+            m.save()
+            return HttpResponse('you idea upload success')
+
+    else:
+        form = AddIdeaAuthorized()
+        return render(request, 'testproj/add_idea_auth.html', {'form': form})
