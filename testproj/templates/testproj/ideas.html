@@ -1,9 +1,12 @@
 All approved ideas sorted by likes from max to min 
 <ul>
 {% for idea in ideas_list %}
-    <li><a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> have {{ idea.like_qty}} likes. <a href="/like/{{idea.pk}}/">Like now</a></li>
+    <li><p><a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> <b>{{ idea.like_qty}}</b> likes.</p>
+        <p><a href="/like/{{idea.pk}}/">Like now</a></p>
+    </li>
 {% endfor %}
 </ul>
+
 Page: {{ current_page }}
 <p></p>
 {% for num in num_pages %}
