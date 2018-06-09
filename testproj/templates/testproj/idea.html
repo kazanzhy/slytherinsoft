@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>{{idea.title}}</title>
-</head>
-<body>
-	<h1>{{idea.title}}</h1>
-	<p>{{idea.content}}</p>
-	<a href="{% url 'ideas' %}"><Back to all ideas</a>
-</body>
-</html>
+<h1>{{idea.title}}</h1> Likes: {{ idea.like_qty }}
+<p>{{idea.content|safe}}</p>
+<img src="{{ idea.cover.url }}">
+<p>Likes: {{ idea.like_qty }}</p>
+<p></p>
+<p><a href="{% url 'ideas' %}">Back to all ideas</a></p>
+

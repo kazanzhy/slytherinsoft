@@ -77,7 +77,7 @@ def idea(request, idea_id):
     idea.views += 1
     idea.save()
     idea.like_qty = idea.likes.count()
-    context = {'idea': idea.content}
+    context = {'idea': idea}
     return render(request, 'testproj/idea.html', context)
 
 
@@ -135,22 +135,32 @@ class IdeasWeekArchiveView(WeekArchiveView):
 
 # add new idea if user is authorized
 @login_required
-def add_idea_auth(request):
+def new(request):
     # idea_auth = get_object_or_404(Ideas, pk=pk)
 
     if request.method == 'POST':
-        form = AddIdeaAuthorized(request.POST, request.FILES)
+        form = IdeaForm(request.POST, request.FILES)
         if form.is_valid():
-            m = Ideas()
-            m.title = form.cleaned_data['ideaadd_title_auth']
-            m.cover = form.cleaned_data['ideaadd_cover_auth']
-            m.content = form.cleaned_data['ideaadd_text_auth']
-            # m.status = form.cleaned_data['ideaadd_status_auth']
-            m.status = ['just created']
-            m.author = User.objects.get()
-            m.save()
-            return HttpResponse('you idea upload success')
+            idea = Ideas()
+            idea.title = form.cleaned_data['title']
+            idea.cover = form.cleaned_data['cover']
+            idea.content = form.cleaned_data['content']
+            idea.author = request.user
+            idea.save()
+            print('/idea/{}'.format(idea.pk))
+            return redirect('/idea/{}'.format(idea.pk))
 
     else:
-        form = AddIdeaAuthorized()
-        return render(request, 'testproj/add_idea_auth.html', {'form': form})
+        form = IdeaForm()
+        return render(request, 'testproj/new.html', {'form': form})
+
+
+
+
+
+
+
+
+
+
+
