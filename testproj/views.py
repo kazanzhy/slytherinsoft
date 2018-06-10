@@ -20,7 +20,7 @@ from django.db.models.signals import pre_save
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'testproj/home.html')
 
 
 @login_required

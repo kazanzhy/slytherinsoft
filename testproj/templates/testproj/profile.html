@@ -1,13 +1,26 @@
+{% extends 'testproj/base.html' %}
+{% block content %}
+
 <p>Your username: {{ profile.user }} ({{ profile.role }})</p>
 <p>Is your profile verified: {{profile.is_verified}}</p>
-<p>Direct link to your profile: <a href="/user/{{ profile.user }}">/user/{{ profile.user }}</a></p>
+<p>Direct link to your profile: <a href="/profile/{{ profile.user }}">/user/{{ profile.user }}</a></p>
 <p>Your biography: {{ profile.bio }}</p>
 <p>Your ideas:</p>
 
 <ul>
-{% for idea in ideas %}
-  <li><a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is "{{ idea.status }}"</li>
-{% endfor %}
+    {% for idea in ideas %}
+  <li>
+    <a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is 
+            {% if idea.is_approved %} 
+                <b>approved</b> 
+            {% else %} 
+                <i>not approved</i>
+            {% endif %}
+    </li>
+    {% endfor %}
 </ul> 
+
+{% endblock %}
+
 
 

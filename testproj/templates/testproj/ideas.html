@@ -1,8 +1,12 @@
-All approved ideas sorted by likes from max to min 
+{% extends 'testproj/base.html' %}
+{% block content %}
+
 <ul>
 {% for idea in ideas_list %}
-    <li><p><a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> <b>{{ idea.like_qty}}</b> likes.</p>
-        <p><a href="/like/{{idea.pk}}/">Like now</a></p>
+    <li>
+        <p><a href="/idea/{{idea.pk}}/">{{idea.title}}</a> created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></p>
+        <p>Views: <b>{{ idea.views}}</b></p>
+        <p>Likes: <b>{{ idea.like_qty}}</b> <a href="/like/{{idea.pk}}/">Like now</a></p>
     </li>
 {% endfor %}
 </ul>
@@ -12,3 +16,5 @@ Page: {{ current_page }}
 {% for num in num_pages %}
  {{ num }}
 {% endfor %}
+
+{% endblock %}
