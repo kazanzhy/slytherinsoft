@@ -6,7 +6,7 @@ from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 class IdeaForm(ModelForm):
     title = forms.CharField(label='Idea title')
-    cover = forms.ImageField()
+    cover = forms.ImageField(required = False)
     content = forms.CharField(label='Idea description', widget=SummernoteWidget())
     class Meta:
         model = Ideas

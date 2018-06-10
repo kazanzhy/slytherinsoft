@@ -42,6 +42,7 @@ urlpatterns = [
     re_path(r'^summernote/', include('django_summernote.urls')),
     
     re_path(r'^ideas/', views.ideas, name='ideas'),
+    re_path(r'^best/', views.best, name='best'),
     re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea, name='idea'),
     re_path(r'^new/', views.new, name='new'),
     re_path(r'^profile/my', views.profile, name='profile'),

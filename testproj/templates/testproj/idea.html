@@ -4,8 +4,9 @@
 
 <h1>{{idea.title}}</h1> 
 <p>{{idea.content|safe}}</p>
+{% if idea.cover %}
 <img src="{{ idea.cover.url }}">
-
+{% endif %}
 <p>Views: <b>{{ idea.views}}</b> Likes: <b>{{ idea.like_qty}}</b> <a href="/like/{{idea.pk}}/">Like now</a></p>
 <p><i>Created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></i></p>
 

@@ -48,21 +48,29 @@ def ideas(request):
     '''
     Return list of all approved ideas
     '''
-    if 'display' in request.GET and request.GET['display'] == 'best':
-        ideas_list = Ideas.objects.filter(is_approved=True).order_by('-create_date', '-likes')[:30]
-        current_page = 1
-        num_pages = [1]
+    if 'page' in request.GET:
+        current_page = int(request.GET['page'])
     else:
-        if 'page' in request.GET:
-            current_page = int(request.GET['page'])
-        else:
-            current_page = 1  
-        ideas_list = Ideas.objects.filter(is_approved=True)
-        pages = Paginator(ideas_list, 30) # 30 ideas on one page
-        if current_page not in pages.page_range:
-            current_page = 1
-        ideas_list = pages.page(current_page) # ideas_list have .has_previous() and .has_next()
-        num_pages = pages.page_range
+        current_page = 1  
+    ideas_list = Ideas.objects.filter(is_approved=True)
+    pages = Paginator(ideas_list, 30) # 30 ideas on one page
+    if current_page not in pages.page_range:
+        current_page = 1
+    ideas_list = pages.page(current_page) # ideas_list have .has_previous() and .has_next()
+    num_pages = pages.page_range
+    for idea in ideas_list:
+        idea.like_qty = idea.likes.count()
+    context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
+    return render(request, 'testproj/ideas.html', context)
+
+def best(request):
+    '''
+    Return list of all approved ideas
+    '''
+    ideas_list = Ideas.objects.filter(is_approved=True).order_by('-create_date', '-likes')[:30]
+    current_page = 1
+    num_pages = [1]
+    ideas_list = Ideas.objects.filter(is_approved=True)
     for idea in ideas_list:
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
