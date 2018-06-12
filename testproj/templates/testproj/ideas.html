@@ -4,17 +4,20 @@
 <ul>
 {% for idea in ideas_list %}
     <li>
-        <p><a href="/idea/{{idea.pk}}/">{{idea.title}}</a> created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></p>
-        <p>Views: <b>{{ idea.views}}</b></p>
-        <p>Likes: <b>{{ idea.like_qty}}</b> <a href="/like/{{idea.pk}}/">Like now</a></p>
+        <p><a href="/idea/{{idea.pk}}/">{{idea.title}}</a></p>
+        <p><i> created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></p></i></p>
+        <p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
     </li>
 {% endfor %}
 </ul>
 
-Page: {{ current_page }}
-<p></p>
-{% for num in num_pages %}
- {{ num }}
-{% endfor %}
 
+Pages:
+{% for num in num_pages %}
+    {% if num == current_page %}
+        <b>{{num}}</b>
+    {% else %}
+    <a href="/ideas/?page={{num}}">{{num}}</a>
+    {% endif %}
+{% endfor %}
 {% endblock %}

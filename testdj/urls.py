@@ -44,12 +44,14 @@ urlpatterns = [
     re_path(r'^ideas/', views.ideas, name='ideas'),
     re_path(r'^best/', views.best, name='best'),
     re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea, name='idea'),
-    re_path(r'^new/', views.new, name='new'),
+    re_path(r'^idea/add/', views.add, name='add'),
+    re_path(r'^profile/edit', views.edit, name='edit'),
     re_path(r'^profile/my', views.profile, name='profile'),
     re_path(r'^profile/(?P<username>\w+)/', views.user, name='user'),
+    re_path(r'^notifications/', views.notifications, name='notifications'),
+    re_path(r'^approvement/', views.approvement, name='approvement'),
     re_path(r'^archive/', include(archive_patterns)),
-
-    re_path(r'^like/(?P<idea_id>[0-9]+)/', views.like), # Move to 'hidden_patterns'
+    re_path(r'^like/', views.like), # Move to 'hidden_patterns'
 
     re_path(r'^$', views.home, name='home'),
 ]

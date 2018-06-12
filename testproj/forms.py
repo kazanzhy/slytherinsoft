@@ -1,5 +1,5 @@
 from django import forms
-from testproj.models import Ideas
+from testproj.models import *
 from django.forms import ModelForm, Textarea
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
@@ -16,8 +16,11 @@ class IdeaForm(ModelForm):
             'bar': SummernoteInplaceWidget(),
         }
 
-class AddIdeaAuthorized(forms.Form):
-    ideaadd_title_auth = forms.CharField(label='Idea Title: ', max_length=100)
-    ideaadd_text_auth = forms.CharField(label='Idea Text: ', widget=SummernoteWidget())
-    ideaadd_cover_auth = forms.ImageField()
-
+class EditForm(ModelForm):
+    firstname = forms.CharField(label='First name')
+    lastname = forms.CharField(label='Last name')
+    city = forms.CharField(label='City')
+    bio = forms.CharField(label='Biography')
+    class Meta:
+        model = Profile
+        exclude = ['user', 'is_moderator', 'is_verified']

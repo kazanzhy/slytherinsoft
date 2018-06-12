@@ -1,0 +1,19 @@
+{% extends 'testproj/base.html' %}
+{% block content %}
+
+<ul>
+{% for notification in notifications %}
+    <li>Idea <a href="/idea/{{notification.idea.pk}}/">{{notification.idea.title}}</a>
+        was {% if notification.text == 'approved' %}
+            <font color="green">{{notification.text}}</font>
+            {% elif notification.text == 'declined' %} 
+            <font color="red">{{notification.text}}</font>
+            {% elif notification.text == 'liked' %} 
+            <font color="purple">{{notification.text}}</font>
+            {% endif %} 
+        by <a href="/profile/{{notification.moderator.username}}/">{{notification.moderator.username}}</a>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

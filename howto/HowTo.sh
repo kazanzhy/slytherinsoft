@@ -29,7 +29,7 @@ pip3 install -r requirements.txt
 
 #sudo mysql -u root -p < script.sql
 #python3 manage.py makemigrations
-#sudo python3 manage.py migrate
+#python3 manage.py migrate
 
 #gunicorn testdj.wsgi:application --bind 127.0.0.1:8080 
 #python3 manage.py runserver

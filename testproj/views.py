@@ -19,11 +19,6 @@ from django.db.models.signals import pre_save
 
 
 @login_required
-def home(request):
-    return render(request, 'testproj/home.html')
-
-
-@login_required
 def password(request):
     if request.user.has_usable_password():
         PasswordForm = PasswordChangeForm
@@ -44,6 +39,16 @@ def password(request):
     return render(request, 'password.html', {'form': form})
 
 
+@login_required
+def home(request):
+    ideas_list = Ideas.objects.filter(status='a').order_by('-create_date', '-likes')[:30]
+    for idea in ideas_list:
+        idea.view_qty = idea.views.count()
+        idea.like_qty = idea.likes.count()
+    context = {'ideas_list': ideas_list} 
+    return render(request, 'testproj/home.html', context)
+
+
 def ideas(request):
     '''
     Return list of all approved ideas
@@ -52,13 +57,14 @@ def ideas(request):
         current_page = int(request.GET['page'])
     else:
         current_page = 1  
-    ideas_list = Ideas.objects.filter(is_approved=True)
+    ideas_list = Ideas.objects.filter(status='a')
     pages = Paginator(ideas_list, 30) # 30 ideas on one page
     if current_page not in pages.page_range:
         current_page = 1
     ideas_list = pages.page(current_page) # ideas_list have .has_previous() and .has_next()
     num_pages = pages.page_range
     for idea in ideas_list:
+        idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
     return render(request, 'testproj/ideas.html', context)
@@ -67,11 +73,15 @@ def best(request):
     '''
     Return list of all approved ideas
     '''
-    ideas_list = Ideas.objects.filter(is_approved=True).order_by('-create_date', '-likes')[:30]
-    current_page = 1
-    num_pages = [1]
-    ideas_list = Ideas.objects.filter(is_approved=True)
+    if 'page' in request.GET:
+        current_page = int(request.GET['page'])
+    else:
+        current_page = 1  
+    ideas_list = Ideas.objects.filter(status='a').order_by('-likes')
+    pages = Paginator(ideas_list, 30) # 30 ideas on one page
+    num_pages = pages.page_range
     for idea in ideas_list:
+        idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
     return render(request, 'testproj/ideas.html', context)
@@ -82,28 +92,39 @@ def idea(request, idea_id):
     Return one idea with selected number
     '''
     idea = get_object_or_404(Ideas, pk=idea_id)
-    idea.views += 1
+    if request.user not in idea.views.all():
+        idea.views.add(request.user)
     idea.save()
     idea.like_qty = idea.likes.count()
-    context = {'idea': idea}
+    idea.view_qty = idea.views.count()
+    context = {'idea': idea, 'is_moderator': Profile.objects.get(user__username=request.user.username).is_moderator}
     return render(request, 'testproj/idea.html', context)
 
 
 @login_required
-def like(request, idea_id):
+def like(request):
     '''
     Put like
     '''
+    action = request.GET['action']
+    idea_id = int(request.GET['id'])
     idea = get_object_or_404(Ideas, pk=idea_id)
-    if request.user in idea.likes.all():
-        idea.likes.remove(request.user)
-        liked = False
-    else:
-        idea.likes.add(request.user)
-        liked = True
+    if action == 'like':
+        if request.user in idea.likes.all():
+            idea.likes.remove(request.user)  
+        else:
+            idea.likes.add(request.user)
+            idea.save()
+            notif = Notifications(user=idea.author, moderator=request.user, idea=idea, text='liked')
+    elif action == 'approve':
+        idea.status = 'a'
+        notif = Notifications(user=idea.author, moderator=request.user, idea=idea, text='approved')
+    elif action == 'decline':
+        idea.status = 'a'
+        notif = Notifications(user=idea.author, moderator=request.user, idea=idea, text='declined')
+    notif.save()
     idea.save()
-    context = {'liked': liked, 'idea_id': idea_id, 'likes': idea.likes.count()}
-    return JsonResponse(context)
+    return redirect('/idea/{}/'.format(idea_id))
 
 
 def user(request, username):
@@ -111,8 +132,8 @@ def user(request, username):
     Return profile of selected user
     '''
     user = User.objects.get(username=username)
-    profile = ExtendedUser.objects.get(user=user)
-    ideas = Ideas.objects.filter(author=user)
+    profile = Profile.objects.get(user=user)
+    ideas = Ideas.objects.filter(author=user, status__in=['a', 'd'])
     context = {'profile': profile, 'ideas': ideas}
     return render(request, 'testproj/user.html', context)
 
@@ -122,10 +143,75 @@ def profile(request):
     '''
     Return user\'s own profile
     '''
-    profile = ExtendedUser.objects.get(user__username=request.user.username)
+    profile = Profile.objects.get(user__username=request.user.username)
     ideas = Ideas.objects.filter(author=request.user)
     context = {'profile': profile, 'ideas': ideas}
     return render(request, 'testproj/profile.html', context)
+
+@login_required
+def edit(request):
+    '''
+    Return user\'s own profile
+    '''
+    if request.method == 'POST':
+        form = EditForm(request.POST)
+        if form.is_valid():
+            profile = get_object_or_404(Profile, pk=request.user.pk)
+            profile.firstname = form.cleaned_data['firstname']
+            profile.lastname = form.cleaned_data['lastname']
+            profile.city = form.cleaned_data['city']
+            profile.bio = form.cleaned_data['bio']
+            profile.save()
+            return redirect('/profile/my')
+    else:
+        form = EditForm()
+        return render(request, 'testproj/edit.html', {'form': form})
+
+
+# add new idea if user is authorized
+@login_required
+def add(request):
+    if request.method == 'POST':
+        form = IdeaForm(request.POST, request.FILES)
+        if form.is_valid():
+            idea = Ideas()
+            idea.title = form.cleaned_data['title']
+            idea.cover = form.cleaned_data['cover']
+            idea.content = form.cleaned_data['content']
+            idea.author = request.user
+            idea.save()
+            return redirect('/idea/{}'.format(idea.pk))
+    else:
+        form = IdeaForm()
+        return render(request, 'testproj/add.html', {'form': form})
+
+
+@login_required
+def notifications(request):
+    '''
+    Return notifications for user
+    '''
+    notifications = Notifications.objects.filter(user__username=request.user.username).order_by('-create_date')[:30]
+    context = {'notifications': notifications}
+    return render(request, 'testproj/notifications.html', context)
+
+@login_required
+def approvement(request):
+    '''
+    Return list of all approved ideas
+    '''
+    if 'page' in request.GET:
+        current_page = int(request.GET['page'])
+    else:
+        current_page = 1  
+    ideas_list = Ideas.objects.filter(status='p')
+    pages = Paginator(ideas_list, 30) # 30 ideas on one page
+    num_pages = pages.page_range
+    for idea in ideas_list:
+        idea.view_qty = idea.views.count()
+        idea.like_qty = idea.likes.count()
+    context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
+    return render(request, 'testproj/ideas.html', context)
 
 
 class IdeasMonthArchiveView(MonthArchiveView):
@@ -139,33 +225,6 @@ class IdeasWeekArchiveView(WeekArchiveView):
     date_field = "pub_date"
     week_format = "%W"
     allow_future = False
-
-
-# add new idea if user is authorized
-@login_required
-def new(request):
-    # idea_auth = get_object_or_404(Ideas, pk=pk)
-
-    if request.method == 'POST':
-        form = IdeaForm(request.POST, request.FILES)
-        if form.is_valid():
-            idea = Ideas()
-            idea.title = form.cleaned_data['title']
-            idea.cover = form.cleaned_data['cover']
-            idea.content = form.cleaned_data['content']
-            idea.author = request.user
-            idea.save()
-            print('/idea/{}'.format(idea.pk))
-            return redirect('/idea/{}'.format(idea.pk))
-
-    else:
-        form = IdeaForm()
-        return render(request, 'testproj/new.html', {'form': form})
-
-
-
-
-
 
 
 

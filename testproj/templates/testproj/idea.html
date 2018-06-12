@@ -3,14 +3,21 @@
 {% block content %}
 
 <h1>{{idea.title}}</h1> 
+<p><i>Created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></i></p>
 <p>{{idea.content|safe}}</p>
+
 {% if idea.cover %}
 <img src="{{ idea.cover.url }}">
 {% endif %}
-<p>Views: <b>{{ idea.views}}</b> Likes: <b>{{ idea.like_qty}}</b> <a href="/like/{{idea.pk}}/">Like now</a></p>
-<p><i>Created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></i></p>
 
+<p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
+<p>
+<a href="/like/?action=like&id={{idea.pk}}">Like</a>
+{% if is_moderator %}
+<a href="/like/?action=approve&id={{idea.pk}}">Approve</a>
+<a href="/like/?action=decline&id={{idea.pk}}">Decline</a>
+{% endif %}
+</p>
 
-<p><a href="{% url 'ideas' %}">Back to all ideas</a></p>
 
 {% endblock %}
