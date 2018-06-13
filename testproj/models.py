@@ -52,7 +52,7 @@ class Ideas(models.Model):
         ('a', 'Approved'),
         ('d', 'Declined'),
     )
-    status = models.CharField(max_length=1, choices=IDEA_STATUS, blank=True, default='c', help_text='Current status of idea')
+    status = models.CharField(max_length=1, choices=IDEA_STATUS, blank=True, default='p', help_text='Current status of idea')
 
     def __str__(self):
         return '"{}" by "{}" now is {}'.format(self.title, self.author, self.status)
