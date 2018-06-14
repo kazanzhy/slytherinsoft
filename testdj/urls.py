@@ -19,7 +19,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views import generic
-from django.conf.urls import include, url
 from testproj import views
 from testproj.models import Ideas
 from testproj.views import IdeasMonthArchiveView, IdeasWeekArchiveView
@@ -27,21 +26,11 @@ from testproj.views import IdeasMonthArchiveView, IdeasWeekArchiveView
 # from testproj.core import views as core views
 admin.autodiscover()
 
-ideas_patterns = [
-    url(r'^all/(?P<current_page>[0-9]+)', views.ideas),
-    url(r'^new/(?P<current_page>[0-9]+)', views.new),
-    url(r'^idea/(?P<idea_id>[0-9]+)/', views.idea),
-    ]
-
-profile_patterns = [
-    url(r'^my/', views.profile),
-    url(r'^(?P<username>\w+)/', views.user),
-    ]
 
 archive_patterns = [
-    url(r'^month/(?P<year>\d+)/(?P<month>\w+)$', IdeasMonthArchiveView.as_view(month_format='%m'),
+    re_path(r'^month/(?P<year>\d+)/(?P<month>\w+)$', IdeasMonthArchiveView.as_view(month_format='%m'),
         {'queryset': Ideas.objects.all(), 'date_field': 'created_on'}, name='blog_archive_month'),
-    url(r'^week/(?P<year>\d+)/(?P<week>\d+)$', IdeasWeekArchiveView,
+    re_path(r'^week/(?P<year>\d+)/(?P<week>\d+)$', IdeasWeekArchiveView,
         {'queryset': Ideas.objects.all(), 'date_field': 'created_on'}, name='blog_archive_week'),
     ]
 
@@ -52,11 +41,17 @@ urlpatterns = [
     re_path(r'^account_logout/$', auth_views.logout, name='logout'),
     re_path(r'^summernote/', include('django_summernote.urls')),
     
-    re_path(r'^ideas/', include(ideas_patterns)),
-    re_path(r'^profile/', include(profile_patterns)),
+    re_path(r'^ideas/', views.ideas, name='ideas'),
+    re_path(r'^best/', views.best, name='best'),
+    re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea, name='idea'),
+    re_path(r'^idea/add/', views.add, name='add'),
+    re_path(r'^profile/edit', views.edit, name='edit'),
+    re_path(r'^profile/my', views.profile, name='profile'),
+    re_path(r'^profile/(?P<username>\w+)/', views.user, name='user'),
+    re_path(r'^notifications/', views.notifications, name='notifications'),
+    re_path(r'^approvement/', views.approvement, name='approvement'),
     re_path(r'^archive/', include(archive_patterns)),
-
-    re_path(r'^like/(?P<idea_id>[0-9]+)/', views.like), # Move to 'hidden_patterns'
+    re_path(r'^like/', views.like), # Move to 'hidden_patterns'
 
     re_path(r'^$', views.home, name='home'),
 ]

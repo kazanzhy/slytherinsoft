@@ -1,21 +1,26 @@
 from django import forms
-from testproj.models import Ideas
+from testproj.models import *
 from django.forms import ModelForm, Textarea
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 
-class SomeForm(forms.Form):
-    content = forms.CharField(widget=SummernoteWidget())  # instead of forms.Textarea
-
-
-class IdeasForm(ModelForm):
-    # text = forms.CharField(widget=forms.Textarea, label='Entry')
-    content = forms.CharField(widget=SummernoteWidget())
-   # text = forms.CharField(widget=TinyMCEWidget(attrs={'cols': 80, 'rows': 30}), label='Entry')
+class IdeaForm(ModelForm):
+    title = forms.CharField(label='Idea title')
+    cover = forms.ImageField(required = False)
+    content = forms.CharField(label='Idea description', widget=SummernoteWidget())
     class Meta:
         model = Ideas
-        exclude = ['likes']
+        exclude = ['likes', 'author', 'is_approved', 'views', 'status']
         widgets = {
             'foo': SummernoteWidget(),
             'bar': SummernoteInplaceWidget(),
         }
+
+class EditForm(ModelForm):
+    firstname = forms.CharField(label='First name')
+    lastname = forms.CharField(label='Last name')
+    city = forms.CharField(label='City')
+    bio = forms.CharField(label='Biography')
+    class Meta:
+        model = Profile
+        exclude = ['user', 'is_moderator', 'is_verified']

@@ -2,49 +2,19 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.template.defaultfilters import slugify
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
-class IdeaStatus(models.Model):
-    '''
-    Idea statuses. One row - one status (just created, edited, approved, declined)
-    '''
-    status = models.CharField(unique=True, max_length=255)
-
-    def __str__(self):
-        return self.status
-    
-    class Meta:
-        db_table = 'ideastatus'
-        verbose_name = "Idea Status"
-        verbose_name_plural = "Idea Statuses"
-
-
-class Role(models.Model):
-    '''
-    Roles of users. One row - one role (architect, moderator, user, banned)
-    '''
-    role = models.CharField(unique=True, max_length=255)
-
-    def __str__(self):
-        return self.role
-
-    class Meta:
-        db_table = 'roles'
-        verbose_name = "Roles"
-        verbose_name_plural = "Roles"
-
-
-class ExtendedUser(models.Model):
+class Profile(models.Model):
     '''
     Users. Extends of standard model
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
-    firstname = models.CharField(max_length=255, blank=True)
-    lastname = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    bio = models.TextField(default='Info about me')
-    #link = models.CharField(max_length=255, unique=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role_id', blank=True)
+    firstname = models.CharField(max_length=255, blank=True, help_text="Enter your firstname")
+    lastname = models.CharField(max_length=255, blank=True, help_text="Enter your lastname")
+    city = models.CharField(max_length=255, blank=True, help_text="Enter city where you live")
+    bio = models.TextField(blank=True, help_text="Enter some info about you")
     is_moderator = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
 
@@ -52,42 +22,41 @@ class ExtendedUser(models.Model):
         return '{} ({})'.format(self.user, self.role, self.is_verified)
 
     class Meta:
-        db_table = 'extendeduser'
-        verbose_name = "Extended User"
-        verbose_name_plural = "Extended Users"
+        db_table = 'profile'
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 
 class Ideas(models.Model):
     '''
     Ideas. 
     '''
-    title = models.CharField(max_length=255) #unique=True)
+    title = models.CharField(max_length=255, help_text="Enter the title of your idea") #unique=True)
     cover = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True, null=True)
-    content = models.TextField() #content = HTMLField()
-    status = models.ForeignKey(IdeaStatus, on_delete=models.CASCADE, related_name='status_id')
+    content = models.TextField(help_text="Describe your idea here") #content = HTMLField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_id')
-    moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator_id', blank=True, null=True)
-    is_approved = models.BooleanField(default=False)
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
-    likes = models.ManyToManyField(User, blank=True)
-    views = models.PositiveIntegerField(default=0)    
-    slug = models.SlugField(unique=True)
+    likes = models.ManyToManyField(User, blank=True, related_name='likes')
+    views = models.ManyToManyField(User, blank=True, related_name='views')    
+    IDEA_STATUS = (
+        ('c', 'Created'),
+        ('p', 'Published'),
+        ('a', 'Approved'),
+        ('d', 'Declined'),
+    )
+    status = models.CharField(max_length=1, choices=IDEA_STATUS, blank=True, default='p', help_text='Current status of idea')
 
     def __str__(self):
         return '"{}" by "{}" now is {}'.format(self.title, self.author, self.status)
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('blog_post_detail', (),
-                {
-                    'slug': self.slug,
-                })
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super(Ideas, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'ideas'
@@ -95,6 +64,44 @@ class Ideas(models.Model):
         verbose_name_plural = "Ideas"
 
 
+class Notifications(models.Model):
+    '''
+    Notifications. 
+    '''
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='moderator', blank=True, null=True)
+    idea = models.ForeignKey(Ideas, on_delete=models.CASCADE, related_name='idea', blank=True, null=True)
+    text = models.CharField(max_length=511, help_text="Enter the title of your idea") #unique=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+   
+    class Meta:
+        db_table = 'notifications'
+        verbose_name = "Notifications"
+        verbose_name_plural = "Notifications"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> dima
 
 
 

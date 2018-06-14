@@ -1,13 +1,34 @@
-<p>Your username: {{ profile.user }} ({{ profile.role }})</p>
-<p>Is your profile verified: {{profile.is_verified}}</p>
-<p>Direct link to your profile: <a href="/user/{{ profile.user }}">/user/{{ profile.user }}</a></p>
-<p>Your biography: {{ profile.bio }}</p>
-<p>Your ideas:</p>
+{% extends 'testproj/base.html' %}
+{% block content %}
+<h3>{{profile.firstname}} {{profile.lastname}}</h3>
+<p>Username: {{ profile.user }} ({% if profile.is_verified %}Verified{% else %} Not verified {% endif %})</p>
+<p>
+{% if profile.is_moderator %} 
+    (<i>you're moderator so you can approve ideas of other users <a href="{% url 'approvement' %}">here</a>)</i>
+{% endif %}
+</p>
+<p>City: {{ profile.city }}</p>
+<p>My biography: {{ profile.bio }}</p>
+<p>My ideas:</p>
 
 <ul>
-{% for idea in ideas %}
-  <li><a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is "{{ idea.status }}"</li>
-{% endfor %}
+    {% for idea in ideas %}
+  <li>
+    <a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is 
+            {% if idea.status == 'c' %} 
+                Just created
+            {% elif idea.status == 'p' %}
+                Published 
+            {% elif idea.status == 'a' %}   
+                <b>Accepted</b> 
+            {% else %} 
+                <i>Declined</i>
+            {% endif %}
+    </li>
+    {% endfor %}
 </ul> 
+
+{% endblock %}
+
 
 

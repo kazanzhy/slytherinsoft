@@ -1,10 +1,23 @@
-<p>Username: {{ profile.user }} ({{ profile.role }}) </p>
+{% extends 'testproj/base.html' %}
+{% block content %}
+<h3>{{profile.firstname}} {{profile.lastname}}</h3>
+<p>Username: {{ profile.user }}</p>
 <p>Is verified: {{profile.is_verified}}</p>
+<p>City: {{ profile.city }}</p>
 <p>Biography: {{ profile.bio }}</p>
-<p>All ideas of {{ profile.user }}:</p>
+<p>All ideas of "{{ profile.user }}":</p>
 <ul>
-{% for idea in ideas %}
-  <li><a href="/idea/{{idea.pk}}/"> {{idea.title}} </a> is "{{ idea.status }}"</li>
-{% endfor %}
-</ul> 
+    {% for idea in ideas %}
+  <li>
+    <a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is 
+            {% if idea.status == 'a' %}   
+                <b>Accepted</b> 
+            {% else %} 
+                <i>Declined</i>
+            {% endif %}
+    </li>
+    {% endfor %}
+</ul>
 
+<a href="{% url 'ideas' %}"><Back to all ideas</a>
+{% endblock %}
