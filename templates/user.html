@@ -8,13 +8,8 @@
 <p>All ideas of "{{ profile.user }}":</p>
 <ul>
     {% for idea in ideas %}
-  <li>
-    <a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is 
-            {% if idea.status == 'a' %}   
-                <b>Accepted</b> 
-            {% else %} 
-                <i>Declined</i>
-            {% endif %}
+    <li>
+        <a href="/idea/{{idea.pk}}/"> {{idea.title}}</a>
     </li>
     {% endfor %}
 </ul>

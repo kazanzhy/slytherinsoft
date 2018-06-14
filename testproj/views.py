@@ -132,7 +132,7 @@ def user(request, username):
     '''
     user = User.objects.get(username=username)
     profile = Profile.objects.get(user=user)
-    ideas = Ideas.objects.filter(author=user, status__in=['a', 'd'])
+    ideas = Ideas.objects.filter(author=user, status='a')
     context = {'profile': profile, 'ideas': ideas}
     return render(request, 'user.html', context)
 
@@ -152,10 +152,10 @@ def edit(request):
     '''
     Return user\'s own profile
     '''
+    profile = get_object_or_404(Profile, pk=request.user.pk)
     if request.method == 'POST':
         form = EditForm(request.POST)
         if form.is_valid():
-            profile = get_object_or_404(Profile, pk=request.user.pk)
             profile.firstname = form.cleaned_data['firstname']
             profile.lastname = form.cleaned_data['lastname']
             profile.city = form.cleaned_data['city']
@@ -163,7 +163,7 @@ def edit(request):
             profile.save()
             return redirect('/profile/my')
     else:
-        form = EditForm()
+        form = EditForm(initial={'firstname': profile.firstname, 'lastname': profile.lastname, 'city': profile.city, 'bio': profile.bio})
         return render(request, 'edit.html', {'form': form})
 
 
