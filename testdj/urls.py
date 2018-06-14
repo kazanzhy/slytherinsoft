@@ -20,25 +20,17 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views import generic
 from testproj import views
-from testproj.models import Ideas
-from testproj.views import IdeasMonthArchiveView, IdeasWeekArchiveView
+
 
 # from testproj.core import views as core views
 admin.autodiscover()
 
 
-archive_patterns = [
-    re_path(r'^month/(?P<year>\d+)/(?P<month>\w+)$', IdeasMonthArchiveView.as_view(month_format='%m'),
-        {'queryset': Ideas.objects.all(), 'date_field': 'created_on'}, name='blog_archive_month'),
-    re_path(r'^week/(?P<year>\d+)/(?P<week>\d+)$', IdeasWeekArchiveView,
-        {'queryset': Ideas.objects.all(), 'date_field': 'created_on'}, name='blog_archive_week'),
-    ]
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^accounts/', include('allauth.urls')),
-    re_path(r'^account_login/$', auth_views.login, name='registration/login'),
-    re_path(r'^account_logout/$', auth_views.logout, name='logout'),
+    re_path(r'^account_login/$', auth_views.login, {'template_name': 'registration/login.html'}, name='login'),
+    re_path(r'^account_logout/$', auth_views.logout, {'template_name': 'registration/logout.html'}, name='logout'),
     re_path(r'^summernote/', include('django_summernote.urls')),
     
     re_path(r'^ideas/', views.ideas, name='ideas'),
@@ -50,7 +42,6 @@ urlpatterns = [
     re_path(r'^profile/(?P<username>\w+)/', views.user, name='user'),
     re_path(r'^notifications/', views.notifications, name='notifications'),
     re_path(r'^approvement/', views.approvement, name='approvement'),
-    re_path(r'^archive/', include(archive_patterns)),
     re_path(r'^like/', views.like), # Move to 'hidden_patterns'
 
     re_path(r'^$', views.home, name='home'),

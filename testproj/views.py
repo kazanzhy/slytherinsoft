@@ -36,17 +36,16 @@ def password(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordForm(request.user)
-    return render(request, 'password.html', {'form': form})
+    return render(request, 'registration/password.html', {'form': form})
 
 
-@login_required
 def home(request):
     ideas_list = Ideas.objects.filter(status='a').order_by('-create_date', '-likes')[:30]
     for idea in ideas_list:
         idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list} 
-    return render(request, 'testproj/home.html', context)
+    return render(request, 'home.html', context)
 
 
 def ideas(request):
@@ -67,7 +66,7 @@ def ideas(request):
         idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
-    return render(request, 'testproj/ideas.html', context)
+    return render(request, 'ideas.html', context)
 
 def best(request):
     '''
@@ -84,7 +83,7 @@ def best(request):
         idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
-    return render(request, 'testproj/ideas.html', context)
+    return render(request, 'ideas.html', context)
 
 
 def idea(request, idea_id):
@@ -98,7 +97,7 @@ def idea(request, idea_id):
     idea.like_qty = idea.likes.count()
     idea.view_qty = idea.views.count()
     context = {'idea': idea, 'is_moderator': Profile.objects.get(user__username=request.user.username).is_moderator}
-    return render(request, 'testproj/idea.html', context)
+    return render(request, 'idea.html', context)
 
 
 @login_required
@@ -135,7 +134,7 @@ def user(request, username):
     profile = Profile.objects.get(user=user)
     ideas = Ideas.objects.filter(author=user, status__in=['a', 'd'])
     context = {'profile': profile, 'ideas': ideas}
-    return render(request, 'testproj/user.html', context)
+    return render(request, 'user.html', context)
 
 
 @login_required
@@ -146,7 +145,7 @@ def profile(request):
     profile = Profile.objects.get(user__username=request.user.username)
     ideas = Ideas.objects.filter(author=request.user)
     context = {'profile': profile, 'ideas': ideas}
-    return render(request, 'testproj/profile.html', context)
+    return render(request, 'profile.html', context)
 
 @login_required
 def edit(request):
@@ -165,7 +164,7 @@ def edit(request):
             return redirect('/profile/my')
     else:
         form = EditForm()
-        return render(request, 'testproj/edit.html', {'form': form})
+        return render(request, 'edit.html', {'form': form})
 
 
 # add new idea if user is authorized
@@ -183,7 +182,7 @@ def add(request):
             return redirect('/idea/{}'.format(idea.pk))
     else:
         form = IdeaForm()
-        return render(request, 'testproj/add.html', {'form': form})
+        return render(request, 'add.html', {'form': form})
 
 
 @login_required
@@ -193,7 +192,7 @@ def notifications(request):
     '''
     notifications = Notifications.objects.filter(user__username=request.user.username).order_by('-create_date')[:30]
     context = {'notifications': notifications}
-    return render(request, 'testproj/notifications.html', context)
+    return render(request, 'notifications.html', context)
 
 @login_required
 def approvement(request):
@@ -211,7 +210,7 @@ def approvement(request):
         idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
-    return render(request, 'testproj/ideas.html', context)
+    return render(request, 'ideas.html', context)
 
 
 class IdeasMonthArchiveView(MonthArchiveView):

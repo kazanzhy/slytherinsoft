@@ -20,7 +20,7 @@ class EditForm(ModelForm):
     firstname = forms.CharField(label='First name')
     lastname = forms.CharField(label='Last name')
     city = forms.CharField(label='City')
-    bio = forms.CharField(label='Biography')
+    bio = forms.CharField(label='Biography', widget=forms.Textarea)
     class Meta:
         model = Profile
         exclude = ['user', 'is_moderator', 'is_verified']

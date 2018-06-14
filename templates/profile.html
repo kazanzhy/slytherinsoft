@@ -1,4 +1,4 @@
-{% extends 'testproj/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
 <h3>{{profile.firstname}} {{profile.lastname}}</h3>
 <p>Username: {{ profile.user }} ({% if profile.is_verified %}Verified{% else %} Not verified {% endif %})</p>

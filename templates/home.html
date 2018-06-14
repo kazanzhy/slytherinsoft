@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
-
 {% block content %}
-  <h2>Homepage</h2>
   <p>Hello {{ user.username }}!</p>
+Look at the better new ideas.
+
+<ul>
+{% for idea in ideas_list %}
+    <li>
+        <p><a href="/idea/{{idea.pk}}/">{{idea.title}}</a> created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></p>
+        <p>Views: <b>{{ idea.view_qty}}</b></p>
+        <p>Likes: <b>{{ idea.like_qty}}</b> <a href="/like/{{idea.pk}}/">Like now</a></p>
+    </li>
+{% endfor %}
+</ul>
+
 {% endblock %}

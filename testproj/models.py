@@ -98,11 +98,3 @@ class Notifications(models.Model):
 
 
 
-
-
-
->>>>>>> dima
-
-
-
-
