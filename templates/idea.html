@@ -2,20 +2,22 @@
 
 {% block content %}
 
-<h1>{{idea.title}}</h1> 
-<p><i>Created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></i></p>
+<h3>{{idea.title}}</h3> 
 <p>{{idea.content|safe}}</p>
-
 {% if idea.cover %}
 <img src="{{ idea.cover.url }}">
 {% endif %}
-
+<p><i>Created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></i></p>
 <p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
+<p> <a href="/like/?action=like&id={{idea.pk}}">{% if idea.is_liked %}Unlike{% else %}Like{% endif %}</a> 
+{% if can_edit %}
+Edit
+{% endif %}
+</p>
 <p>
-<a href="/like/?action=like&id={{idea.pk}}">Like</a>
-{% if is_moderator %}
-<a href="/like/?action=approve&id={{idea.pk}}">Approve</a>
-<a href="/like/?action=decline&id={{idea.pk}}">Decline</a>
+{% if is_moderator and idea.status == 'p' %}
+<a href="/like/?action=approve&id={{idea.pk}}"><font color="green">Approve</font></a>
+<a href="/like/?action=decline&id={{idea.pk}}"><font color="red">Decline</font></a>
 {% endif %}
 </p>
 

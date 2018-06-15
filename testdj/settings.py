@@ -171,7 +171,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'slytherinsoft/media')
 LOGIN_REDIRECT_URL = "/"
 AUTOCREATE_VALID_SSL_USERS = True
 USER_DATA_FN = 'django_ssl_auth.fineid.user_dict_from_dn'
-
+CSRF_COOKIE_HTTPONLY = False
 
 SOCIAL_AUTH_FACEBOOK_KEY = '426863581058749'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = 'f6da39f6e2971f0d3019cccfc3bbed27'  # App Secret

@@ -16,7 +16,7 @@ from .models import *
 from .forms import *
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save
-
+from django.db.models import Count
 
 @login_required
 def password(request):
@@ -40,7 +40,7 @@ def password(request):
 
 
 def home(request):
-    ideas_list = Ideas.objects.filter(status='a').order_by('-create_date', '-likes')[:30]
+    ideas_list = Ideas.objects.filter(status='a').annotate(num_likes=Count('likes')).order_by('-create_date', '-num_likes')[:30]
     for idea in ideas_list:
         idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
@@ -56,7 +56,7 @@ def ideas(request):
         current_page = int(request.GET['page'])
     else:
         current_page = 1  
-    ideas_list = Ideas.objects.filter(status='a')
+    ideas_list = Ideas.objects.filter(status='a').order_by('-create_date')
     pages = Paginator(ideas_list, 30) # 30 ideas on one page
     if current_page not in pages.page_range:
         current_page = 1
@@ -76,7 +76,7 @@ def best(request):
         current_page = int(request.GET['page'])
     else:
         current_page = 1  
-    ideas_list = Ideas.objects.filter(status='a').order_by('-likes')
+    ideas_list = Ideas.objects.filter(status='a').annotate(num_likes=Count('likes')).order_by('-num_likes')
     pages = Paginator(ideas_list, 30) # 30 ideas on one page
     num_pages = pages.page_range
     for idea in ideas_list:
@@ -96,7 +96,10 @@ def idea(request, idea_id):
     idea.save()
     idea.like_qty = idea.likes.count()
     idea.view_qty = idea.views.count()
-    context = {'idea': idea, 'is_moderator': Profile.objects.get(user__username=request.user.username).is_moderator}
+    idea.is_liked = request.user in idea.likes.all()
+    can_edit = request.user == idea.author
+    is_moderator = Profile.objects.get(user__username=request.user.username).is_moderator
+    context = {'idea': idea, 'is_moderator': is_moderator, 'can_edit': can_edit}
     return render(request, 'idea.html', context)
 
 
@@ -110,16 +113,16 @@ def like(request):
     idea = get_object_or_404(Ideas, pk=idea_id)
     if action == 'like':
         if request.user in idea.likes.all():
-            idea.likes.remove(request.user)  
+            idea.likes.remove(request.user)
+            notif = Notifications(user=idea.author, moderator=request.user, idea=idea, text='unliked')
         else:
             idea.likes.add(request.user)
-            idea.save()
             notif = Notifications(user=idea.author, moderator=request.user, idea=idea, text='liked')
     elif action == 'approve':
         idea.status = 'a'
         notif = Notifications(user=idea.author, moderator=request.user, idea=idea, text='approved')
     elif action == 'decline':
-        idea.status = 'a'
+        idea.status = 'd'
         notif = Notifications(user=idea.author, moderator=request.user, idea=idea, text='declined')
     notif.save()
     idea.save()
@@ -148,7 +151,7 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 @login_required
-def edit(request):
+def edit_profile(request):
     '''
     Return user\'s own profile
     '''
