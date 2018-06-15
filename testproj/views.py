@@ -172,7 +172,7 @@ def edit_profile(request):
 
 # add new idea if user is authorized
 @login_required
-def add(request):
+def add_idea(request):
     if request.method == 'POST':
         form = IdeaForm(request.POST, request.FILES)
         if form.is_valid():
@@ -185,6 +185,23 @@ def add(request):
             return redirect('/idea/{}'.format(idea.pk))
     else:
         form = IdeaForm()
+        return render(request, 'add.html', {'form': form})
+
+
+@login_required
+def edit_idea(request, idea_id):
+    print('idea id ##############################', idea_id)
+    idea = get_object_or_404(Ideas, pk=idea_id)
+    if request.method == 'POST':
+        form = IdeaForm(request.POST, request.FILES)
+        if form.is_valid():
+            idea.title = form.cleaned_data['title']
+            idea.cover = form.cleaned_data['cover']
+            idea.content = form.cleaned_data['content']
+            idea.save()
+            return redirect('/idea/{}'.format(idea.pk))
+    else:
+        form = IdeaForm(initial={'title': idea.title, 'cover': idea.cover, 'content': idea.content})
         return render(request, 'add.html', {'form': form})
 
 

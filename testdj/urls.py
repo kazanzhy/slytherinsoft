@@ -35,8 +35,9 @@ urlpatterns = [
     
     re_path(r'^ideas/', views.ideas, name='ideas'),
     re_path(r'^best/', views.best, name='best'),
+    re_path(r'^idea/add/', views.add_idea, name='add_idea'),
+    re_path(r'^idea/(?P<idea_id>[0-9]+)/edit/', views.edit_idea, name='edit_idea'),
     re_path(r'^idea/(?P<idea_id>[0-9]+)/', views.idea, name='idea'),
-    re_path(r'^idea/add/', views.add, name='add'),
     re_path(r'^profile/edit', views.edit_profile, name='edit_profile'),
     re_path(r'^profile/my', views.profile, name='profile'),
     re_path(r'^profile/(?P<username>\w+)/', views.user, name='user'),

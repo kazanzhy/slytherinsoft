@@ -11,7 +11,7 @@
 <p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
 <p> <a href="/like/?action=like&id={{idea.pk}}">{% if idea.is_liked %}Unlike{% else %}Like{% endif %}</a> 
 {% if can_edit %}
-Edit
+<a href="/idea/{{idea.pk}}/edit/">Edit</a>
 {% endif %}
 </p>
 <p>
