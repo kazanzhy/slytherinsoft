@@ -15,8 +15,8 @@
     {% for idea in ideas %}
   <li>
     <a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is 
-            {% if idea.status == 'c' %} 
-                Just created
+            {% if idea.status == 's' %} 
+                Saved
             {% elif idea.status == 'p' %}
                 Published 
             {% elif idea.status == 'a' %}   

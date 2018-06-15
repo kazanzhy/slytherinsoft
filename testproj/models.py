@@ -48,7 +48,7 @@ class Ideas(models.Model):
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
     views = models.ManyToManyField(User, blank=True, related_name='views')    
     IDEA_STATUS = (
-        ('c', 'Created'),
+        ('s', 'Saved'),
         ('p', 'Published'),
         ('a', 'Approved'),
         ('d', 'Declined'),

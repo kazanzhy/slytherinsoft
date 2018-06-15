@@ -181,6 +181,10 @@ def add_idea(request):
             idea.cover = form.cleaned_data['cover']
             idea.content = form.cleaned_data['content']
             idea.author = request.user
+            if 'save_idea' in request.POST:
+                idea.status = 's'
+            else:
+                idea.status = 'p'
             idea.save()
             return redirect('/idea/{}'.format(idea.pk))
     else:
@@ -190,7 +194,6 @@ def add_idea(request):
 
 @login_required
 def edit_idea(request, idea_id):
-    print('idea id ##############################', idea_id)
     idea = get_object_or_404(Ideas, pk=idea_id)
     if request.method == 'POST':
         form = IdeaForm(request.POST, request.FILES)
@@ -198,6 +201,10 @@ def edit_idea(request, idea_id):
             idea.title = form.cleaned_data['title']
             idea.cover = form.cleaned_data['cover']
             idea.content = form.cleaned_data['content']
+            if 'save_idea' in request.POST:
+                idea.status = 's'
+            else:
+                idea.status = 'p'
             idea.save()
             return redirect('/idea/{}'.format(idea.pk))
     else:
