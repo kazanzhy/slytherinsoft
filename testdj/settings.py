@@ -25,7 +25,7 @@ SECRET_KEY = '^^^j98u*f@rht$&m#ew8-^yypt6j&fd%p+@s_q82ec^u%nr$$('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['slytherin.ideas', '127.0.0.1', 'slytherin.org', '*']
+ALLOWED_HOSTS = ['slytherin.ideas', '127.0.0.1', 'slytherin.org', '192.168.0.58']
 
 
 # Application definition
