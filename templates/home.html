@@ -11,7 +11,7 @@
         <p><a href="/idea/{{idea.pk}}/">{{idea.title}}</a> created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></p>
         {% if idea.cover %}<img src="{{ idea.cover.url }}" height="100" width="200">{% endif %}
         <p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
-        <p><a href="/like/{{idea.pk}}/">Like now</a></p>
+        <p> <a href="/like/?action=like&id={{idea.pk}}">{% if idea.is_liked %}Unlike{% else %}Like{% endif %}</a>
     </li>
 {% endfor %}
 </ul>

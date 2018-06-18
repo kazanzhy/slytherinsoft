@@ -44,6 +44,7 @@ def home(request):
     for idea in ideas_list:
         idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
+        idea.is_liked = request.user in idea.likes.all()
     context = {'ideas_list': ideas_list} 
     return render(request, 'home.html', context)
 
@@ -65,6 +66,7 @@ def ideas(request):
     for idea in ideas_list:
         idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
+        idea.is_liked = request.user in idea.likes.all()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
     return render(request, 'ideas.html', context)
 
@@ -82,6 +84,7 @@ def best(request):
     for idea in ideas_list:
         idea.view_qty = idea.views.count()
         idea.like_qty = idea.likes.count()
+        idea.is_liked = request.user in idea.likes.all()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
     return render(request, 'ideas.html', context)
 
