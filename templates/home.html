@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
-{% block content %}
-  <p>Hello {{ user.username }}!</p>
-Look at the better new ideas.
 
+{% block topbar %}
+  <p>Hello {{ user.username }}! Look at the better new ideas.</p> 
+{% endfor %}
+
+{% block content %}
 <ul>
 {% for idea in ideas_list %}
     <li>
         <p><a href="/idea/{{idea.pk}}/">{{idea.title}}</a> created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></p>
-        <p>Views: <b>{{ idea.view_qty}}</b></p>
-        <p>Likes: <b>{{ idea.like_qty}}</b> <a href="/like/{{idea.pk}}/">Like now</a></p>
+        {% if idea.cover %}<img src="{{ idea.cover.url }}" height="100" width="200">{% endif %}
+        <p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
+        <p><a href="/like/{{idea.pk}}/">Like now</a></p>
     </li>
 {% endfor %}
 </ul>

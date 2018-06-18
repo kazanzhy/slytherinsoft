@@ -199,7 +199,8 @@ def edit_idea(request, idea_id):
         form = IdeaForm(request.POST, request.FILES)
         if form.is_valid():
             idea.title = form.cleaned_data['title']
-            idea.cover = form.cleaned_data['cover']
+            if form.cleaned_data['cover'] != None:
+                idea.cover = form.cleaned_data['cover']
             idea.content = form.cleaned_data['content']
             if 'save_idea' in request.POST:
                 idea.status = 's'

@@ -3,10 +3,10 @@
 {% block content %}
 
 <h3>{{idea.title}}</h3> 
-<p>{{idea.content|safe}}</p>
 {% if idea.cover %}
 <img src="{{ idea.cover.url }}">
 {% endif %}
+<p>{{idea.content|safe}}</p>
 <p><i>Created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></i></p>
 <p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
 <p> <a href="/like/?action=like&id={{idea.pk}}">{% if idea.is_liked %}Unlike{% else %}Like{% endif %}</a> 
