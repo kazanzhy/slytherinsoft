@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-    
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
         {{ form }}
         </table>
-        <input type="submit" name="save_idea" value="Save idea" />
-        <input type="submit" name="publish_idea" value="Publish idea" />
+        <br>
+        <input type="submit" class="btn btn-secondary btn-bg" name="save_idea" value="Save to Drafts"/>               
+        <input type="submit" class="btn btn-primary btn-bg " name="publish_idea" value="Publish"/>
+        </br>
     </form>
-
 {% endblock %}

@@ -5,7 +5,7 @@ from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 
 class IdeaForm(ModelForm):
-    title = forms.CharField(label='Idea title')
+    title = forms.CharField(label='Idea title', max_length=200)
     cover = forms.ImageField(required = False)
     content = forms.CharField(label='Idea description', widget=SummernoteWidget())
     class Meta:
@@ -17,10 +17,10 @@ class IdeaForm(ModelForm):
         }
 
 class EditForm(ModelForm):
-    firstname = forms.CharField(label='First name', required = False)
-    lastname = forms.CharField(label='Last name', required = False)
-    city = forms.CharField(label='City', required = False)
-    bio = forms.CharField(label='Biography', widget=forms.Textarea, required = False)
+    firstname = forms.CharField(label='First name', required = False, max_length=200)
+    lastname = forms.CharField(label='Last name', required = False, max_length=200)
+    city = forms.CharField(label='City', required = False, max_length=200)
+    bio = forms.CharField(label='Biography', widget=forms.Textarea, required = False, max_length=5000)
     class Meta:
         model = Profile
         exclude = ['user', 'is_moderator', 'is_verified']

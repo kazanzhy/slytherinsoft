@@ -1,20 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<ul>
-{% for notification in notifications %}
-    <li>
-    <a href="/profile/{{notification.moderator.username}}/">{{notification.moderator.username}}</a>
-        {% if notification.text == 'approved' %}
-        <font color="green">{{notification.text}}</font>
-        {% elif notification.text == 'declined' %} 
-        <font color="red">{{notification.text}}</font>
-        {% elif notification.text == 'liked' %} 
-        <font color="purple">{{notification.text}}</font>
-        {% endif %} 
-        your idea "<a href="/idea/{{notification.idea.pk}}/">{{notification.idea.title}}</a>"
-    </li>
-{% endfor %}
-</ul>
-
+<table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col"></th>
+        <th scope="col">User</th>
+        <th scope="col">Action</th>
+        <th scope="col">Idea</th>
+        <th scope="col">Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for notification in notifications %}
+        <tr>
+        <th scope="row"></th>
+        <td>
+            <a href="/profile/{{notification.moderator.username}}/">{{notification.moderator.username}}</a>
+        </td>
+        <td>
+            {% if notification.text == 'approved' %}
+            <font color="green">{{notification.text}}</font>
+            {% elif notification.text == 'declined' %} 
+            <font color="red">{{notification.text}}</font>
+            {% elif notification.text == 'liked' %} 
+            <font color="purple">{{notification.text}}</font>
+            {% endif %} 
+        </td>
+        <td>
+            <a href="/idea/{{notification.idea.pk}}/">{{notification.idea.title}}</a>
+        </td>
+        <td>
+            {{notification.create_date}}
+        </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

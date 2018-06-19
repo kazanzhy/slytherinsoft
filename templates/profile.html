@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <h3>{{profile.firstname}} {{profile.lastname}}</h3>
-<p>Username: {{ profile.user }} ({% if profile.is_verified %}Verified{% else %} Not verified {% endif %})</p>
 <p>
 {% if profile.is_moderator %} 
     (<i>you're moderator so you can approve ideas of other users <a href="{% url 'approvement' %}">here</a>)</i>
@@ -10,24 +9,22 @@
 <p>City: {{ profile.city }}</p>
 <p>My biography: {{ profile.bio }}</p>
 <p>My ideas:</p>
-
 <ul>
     {% for idea in ideas %}
   <li>
     <a href="/idea/{{idea.pk}}/"> {{idea.title}}</a> is 
             {% if idea.status == 's' %} 
-                Saved
+            <font color="darkgrey">Saved</font>
             {% elif idea.status == 'p' %}
-                Published 
+            <font color="purple">Published</font>
             {% elif idea.status == 'a' %}   
-                <b>Accepted</b> 
+            <font color="green">Accepted</font>
             {% else %} 
-                <i>Declined</i>
+            <font color="red">Declined</font>
             {% endif %}
     </li>
     {% endfor %}
 </ul> 
-
 {% endblock %}
 
 
