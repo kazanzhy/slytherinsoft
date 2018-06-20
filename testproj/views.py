@@ -46,7 +46,7 @@ def home(request):
         idea.like_qty = idea.likes.count()
         idea.is_liked = request.user in idea.likes.all()
     context = {'ideas_list': ideas_list} 
-    return render(request, 'home.html', context)
+    return render(request, 'ideas.html', context)
 
 
 def ideas(request):

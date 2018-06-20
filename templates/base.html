@@ -21,28 +21,27 @@
         <li><a href="{% url 'ideas' %}">All ideas</a></li>
         <li><a href="{% url 'best' %}">Best ideas</a></li>
         <li class="active"><a href="{% url 'add_idea' %}">Add new idea</a></li>
-        <li><a href="{% url 'notifications' %}">Notifications</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'profile' %}">My profile<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="{% url 'profile' %}">My profile</a></li>
-                <li><a href="{% url 'edit_profile' %}">Edit profile</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-            </ul>
-        </li>        
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        {% if request.user.username %} 
+        <li><a href="{% url 'notifications' %}">Notifications</a></li> 
+        <li><a href="{% url 'profile' %}">My profile</a></li>
+        <li><a href="{% url 'edit_profile' %}">Edit profile</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>  
+        {% else %}    
+        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li><a href="{% url 'profile' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        {% endif %}
     </ul>
     </div>
 </nav>
 
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-2">
-        {% block sidebar %}{% endblock %}
+        {% block sidebar %}
+        <p></p>
+        {% endblock %}
         </div>
 
         <div class="col-sm-10 ">
@@ -55,15 +54,6 @@
     </div>
 </div>
 
-
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-    <ul class="nav navbar-nav">
-        <li><a href="#">SlytherinSoft project for DataArt IT school</a></li>
-    </ul>
-  </div>
-</nav>
-
-
+<hr>
 </body>
 </html>
