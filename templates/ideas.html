@@ -3,10 +3,18 @@
 <ul>
 {% for idea in ideas_list %}
     <li>
-        <p><a href="/idea/{{idea.pk}}/">{{idea.title}}</a> created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a></p>
-        {% if idea.cover %}<img src="{{ idea.cover.url }}" height="100" width="200">{% endif %}
-        <p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
-        <p> <a href="/like/?action=like&id={{idea.pk}}">{% if idea.is_liked %}Unlike{% else %}Like{% endif %}</a>
+        <p>
+        <a href="/idea/{{idea.pk}}/">{{idea.title}}</a> 
+        </p>
+        <p>
+        {% if idea.cover %}<a href="/idea/{{idea.pk}}/"><img src="{{ idea.cover.url }}" height="100" width="200"></a>{% endif %}
+        </p>
+        <p>
+        <i>created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a> at {{idea.create_date}}</i>
+        </p>
+        <p>
+        Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b>
+        </p>
     </li>
 {% endfor %}
 </ul>

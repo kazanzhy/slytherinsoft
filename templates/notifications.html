@@ -36,4 +36,18 @@
         {% endfor %}
     </tbody>
 </table>
+
+Pages:
+{% for num in num_pages %}
+    {% if num == current_page %}
+        <b>{{num}}</b>
+    {% else %}
+    <a href="/notifications/?page={{num}}">{{num}}</a>
+    {% endif %}
+{% endfor %}
+
 {% endblock %}
+
+
+
+
