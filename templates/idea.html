@@ -4,7 +4,7 @@
 
 <h3>{{idea.title}}</h3> 
 {% if idea.cover %}
-<img src="{{ idea.cover.url }}">
+<img src="{{ idea.cover.url }}" width="400">
 {% endif %}
 <p>{{idea.content|safe}}</p>
 <p><i>Created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a> at {{idea.create_date}}</i></p>

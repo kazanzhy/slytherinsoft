@@ -94,14 +94,19 @@ def idea(request, idea_id):
     Return one idea with selected number
     '''
     idea = get_object_or_404(Ideas, pk=idea_id)
-    if request.user not in idea.views.all():
-        idea.views.add(request.user)
-    idea.save()
+    if str(request.user) != 'AnonymousUser':
+        if request.user not in idea.views.all():
+            idea.views.add(request.user)
+            idea.save()
+        can_edit = request.user == idea.author
+        is_moderator = Profile.objects.get(user__username=request.user.username).is_moderator
+        idea.is_liked = request.user in idea.likes.all()
+    else:
+        can_edit = False
+        is_moderator = False
+        idea.is_liked = False
     idea.like_qty = idea.likes.count()
     idea.view_qty = idea.views.count()
-    idea.is_liked = request.user in idea.likes.all()
-    can_edit = request.user == idea.author
-    is_moderator = Profile.objects.get(user__username=request.user.username).is_moderator
     context = {'idea': idea, 'is_moderator': is_moderator, 'can_edit': can_edit}
     return render(request, 'idea.html', context)
 
