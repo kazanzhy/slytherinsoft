@@ -37,14 +37,18 @@
     </tbody>
 </table>
 
-Pages:
-{% for num in num_pages %}
+<nav aria-label="...">
+  <ul class="pagination">
+    {% for num in num_pages %}
     {% if num == current_page %}
-        <b>{{num}}</b>
+    <li class="page-item active"><span class="page-link">{{num}}<span class="sr-only">(current)</span></span></li>
     {% else %}
-    <a href="/notifications/?page={{num}}">{{num}}</a>
+    <li class="page-item"><a class="page-link" href="/notifications/?page={{num}}">{{num}}</a></li>
     {% endif %}
-{% endfor %}
+    {% endfor %}
+  </ul>
+</nav>
+
 
 {% endblock %}
 

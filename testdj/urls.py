@@ -29,8 +29,6 @@ admin.autodiscover()
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^accounts/', include('allauth.urls')),
-    re_path(r'^account_login/$', auth_views.login, {'template_name': 'registration/login.html'}, name='login'),
-    re_path(r'^account_logout/$', auth_views.logout, {'template_name': 'registration/logout.html'}, name='logout'),
     re_path(r'^summernote/', include('django_summernote.urls')),
     
     re_path(r'^ideas/', views.ideas, name='ideas'),

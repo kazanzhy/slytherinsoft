@@ -1,32 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul>
-{% for idea in ideas_list %}
-    <li>
-        <p>
-        <a href="/idea/{{idea.pk}}/">{{idea.title}}</a> 
-        </p>
-        <p>
-        {% if idea.cover %}<a href="/idea/{{idea.pk}}/"><img src="{{ idea.cover.url }}" height="100" width="200"></a>{% endif %}
-        </p>
-        <p>
-        <i>created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a> at {{idea.create_date}}</i>
-        </p>
-        <p>
-        Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b>
-        </p>
-    </li>
-{% endfor %}
-</ul>
+<table  class="table table-responsive borderless">
+    <tbody>
+    {% for idea in ideas_list %}
+        {% cycle 'row' '' as row silent %}
+            {% if row %}<tr>{% endif %}
+            <td>
+            <p><a href="/idea/{{idea.pk}}/">{{idea.title}}</a></p>
+            <p><a href="/idea/{{idea.pk}}/">
+                {% if idea.cover %}
+                <img src="{{idea.cover.url}}" height="180" width="320"></a>
+                {% else %}
+                <img src="/media/IdeaCover.jpg" height="180" width="320">
+                {% endif %}
+            </a></p>
+            <p><i>created by <a href="/profile/{{idea.author}}/">{{idea.author}}</a> at {{idea.create_date}}</i></p>
+            <p>Views: <b>{{ idea.view_qty}}</b> Likes: <b>{{ idea.like_qty}}</b></p>
+            </td>
+        {% if not row %}</tr>{% endif %}
+    {% endfor %}
+    </tbody>
+</table>
 
 
-Pages:
-{% for num in num_pages %}
+
+
+
+<nav aria-label="...">
+  <ul class="pagination">
+    {% for num in num_pages %}
     {% if num == current_page %}
-        <b>{{num}}</b>
+    <li class="page-item active"><span class="page-link">{{num}}<span class="sr-only">(current)</span></span></li>
     {% else %}
-    <a href="/ideas/?page={{num}}">{{num}}</a>
+    <li class="page-item"><a class="page-link" href="/ideas/?page={{num}}">{{num}}</a></li>
     {% endif %}
-{% endfor %}
-{% endblock %}
+    {% endfor %}
+  </ul>
+</nav>
 
+{% endblock %}
