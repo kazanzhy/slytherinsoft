@@ -2,11 +2,12 @@
 Project for Odessa DataArt IT school spring 2018
 
 # Technologies
-Python3, Django2, MySQL
+Back: Python3, Django2, MySQL
+Front: Bootstrap
 
 # Team
-Dmytro Kazanzh: backend
-Tetiana Khodorovskaya: backend
-Igor Lagutin: frontend, backend
-Tetiana Khoroshko: QA
-Oleksandr Wasilewskiy: design
+* [Dmytro Kazanzhy](https://github.com/kazanzhy): backend  
+* [Viktoria Khodorovskaya](https://github.com/batwingsv): backend 
+* [Igor Lagutin](https://github.com/igorlagutin): frontend  
+* Tetiana Khoroshko: QA
+* Oleksandr Wasilewskiy: design
