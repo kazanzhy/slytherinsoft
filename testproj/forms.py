@@ -5,6 +5,9 @@ from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 
 class IdeaForm(ModelForm):
+    '''
+    Form for idea creating
+    '''
     title = forms.CharField(label='Idea title', max_length=200)
     cover = forms.ImageField(required = False)
     content = forms.CharField(label='Idea description', widget=SummernoteWidget())
@@ -17,6 +20,9 @@ class IdeaForm(ModelForm):
         }
 
 class EditForm(ModelForm):
+    '''
+    Form for editing of user info
+    '''
     firstname = forms.CharField(label='First name', required = False, max_length=200)
     lastname = forms.CharField(label='Last name', required = False, max_length=200)
     city = forms.CharField(label='City', required = False, max_length=200)

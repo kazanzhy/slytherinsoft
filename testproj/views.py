@@ -1,11 +1,12 @@
+from django import forms
+
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django import forms
-from django.shortcuts import render, redirect, render_to_response, get_object_or_404, HttpResponse
-from django.http import JsonResponse 
+
+from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.paginator import Paginator
 
@@ -14,9 +15,10 @@ from django.views.generic.dates import WeekArchiveView
 
 from .models import *
 from .forms import *
-from django.contrib.auth.models import User
+
 from django.db.models.signals import pre_save
 from django.db.models import Count
+
 
 @login_required
 def password(request):
@@ -40,6 +42,9 @@ def password(request):
 
 
 def home(request):
+    '''
+    Return 20 approved ideas ordered by date and likes count
+    '''
     ideas_list = Ideas.objects.filter(status='a').annotate(num_likes=Count('likes')).order_by('-create_date', '-num_likes')[:20]
     for idea in ideas_list:
         idea.view_qty = idea.views.count()
@@ -51,7 +56,7 @@ def home(request):
 
 def ideas(request):
     '''
-    Return list of all approved ideas
+    Return list of all approved ideas ordered by date
     '''
     if 'page' in request.GET:
         current_page = int(request.GET['page'])
@@ -70,9 +75,10 @@ def ideas(request):
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
     return render(request, 'ideas.html', context)
 
+
 def best(request):
     '''
-    Return list of all approved ideas
+    Return list of all approved ideas ordered by likes count
     '''
     if 'page' in request.GET:
         current_page = int(request.GET['page'])
@@ -91,7 +97,7 @@ def best(request):
 
 def idea(request, idea_id):
     '''
-    Return one idea with selected number
+    Return one idea with selected id
     '''
     idea = get_object_or_404(Ideas, pk=idea_id)
     if str(request.user) != 'AnonymousUser':
@@ -114,7 +120,7 @@ def idea(request, idea_id):
 @login_required
 def like(request):
     '''
-    Put like
+    For put like and modification idea status (approved, declined)
     '''
     action = request.GET['action']
     idea_id = int(request.GET['id'])
@@ -164,6 +170,7 @@ def profile(request):
     context = {'profile': profile, 'ideas': ideas}
     return render(request, 'profile.html', context)
 
+
 @login_required
 def edit_profile(request):
     '''
@@ -184,9 +191,11 @@ def edit_profile(request):
         return render(request, 'edit.html', {'form': form})
 
 
-# add new idea if user is authorized
 @login_required
 def add_idea(request):
+    '''
+    Page for creation idea
+    '''
     if request.method == 'POST':
         form = IdeaForm(request.POST, request.FILES)
         if form.is_valid():
@@ -208,6 +217,9 @@ def add_idea(request):
 
 @login_required
 def edit_idea(request, idea_id):
+    '''
+    Page for editing ide. Uses form for creation idea
+    '''
     idea = get_object_or_404(Ideas, pk=idea_id)
     if request.method == 'POST':
         form = IdeaForm(request.POST, request.FILES)
@@ -230,7 +242,7 @@ def edit_idea(request, idea_id):
 @login_required
 def notifications(request):
     '''
-    Return notifications for user
+    Return all notifications for user
     '''
     if 'page' in request.GET:
         current_page = int(request.GET['page'])
@@ -249,7 +261,7 @@ def notifications(request):
 @login_required
 def approvement(request):
     '''
-    Return list of all approved ideas
+    Page for moderators. Return list of all published ideas
     '''
     if 'page' in request.GET:
         current_page = int(request.GET['page'])
@@ -263,20 +275,6 @@ def approvement(request):
         idea.like_qty = idea.likes.count()
     context = {'ideas_list': ideas_list, 'current_page': current_page, 'num_pages': num_pages} 
     return render(request, 'ideas.html', context)
-
-
-class IdeasMonthArchiveView(MonthArchiveView):
-    queryset = Ideas.objects.all()
-    date_field = "pub_date"
-    allow_future = False
-
-
-class IdeasWeekArchiveView(WeekArchiveView):
-    queryset = Ideas.objects.all()
-    date_field = "pub_date"
-    week_format = "%W"
-    allow_future = False
-
 
 
 

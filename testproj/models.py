@@ -8,7 +8,7 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     '''
-    Users. Extends of standard model
+    Profile. Extends of standard user model
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE) # Standart User model
     firstname = models.CharField(max_length=255, blank=True, help_text="Enter your firstname")
@@ -26,6 +26,7 @@ class Profile(models.Model):
         verbose_name = "Profile"
         verbose_name_plural = "Profiles"
 
+# This block for automated creation of profile-instance when new user registrated 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -78,23 +79,4 @@ class Notifications(models.Model):
         db_table = 'notifications'
         verbose_name = "Notifications"
         verbose_name_plural = "Notifications"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
